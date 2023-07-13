@@ -1,7 +1,12 @@
+//fourth program
 #include <iostream>
 using namespace std;
-int main()
+int main ( int argc, char *argv[])
 {
-	cout << "Enjoy yourself with C++!\n";
+	cout <<
+	       "What a great game that was?\n";
+	cout <<
+	       "I hope you not missed it\n";
 	return 0;
 }
+	    

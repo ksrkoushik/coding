@@ -1,0 +1,411 @@
+CH-11-(PROCESSES & SIGNALS)SUMMARY:
+
+1)  system: 
+            #include <stdlib.h>
+            int system(const char *string);
+            
+    The "system" function runs the command passed to it as a string and waits 
+    for it to complete.
+    Simply, we can cause a program to run from inside another program.
+    The drawback is that the program has to wait until the process started
+    by the call to "system"finishes, we can't get on with other tasks.
+    
+    example programs: system1.c, system1_a.c, system2.c, system3.c,system4.c
+    system5.c
+    
+    In the program system1_a.c, the "ps" command produces output even after 
+    system call exits and in this case does not include entry for system1_a.
+    
+2)  exec functions:
+        #include <unistd.h>
+            
+        int execl(const char *path, const char *arg0, (char *) 0);
+        int execlp(const char *file, const char *arg0, (char *) 0);
+        int execle(const char *path, const char *arg0, (char *) 0, char *const envp[]);
+        
+        int execv(const char *path, char *const argv[]);
+        int execvp(const char *file, char *const argv[]);
+        int execve(const char *path, char *const argv[], char *const envp[]);
+        
+    The functions execl, execlp, execle take a varible number of arguments
+    ending with a null pointer.
+    The functions execv and execvp have as their second argument an array 
+    of strings.
+    
+    examples: execl_1.c, execv_1.c, execle_1.c, execve_1.c, execlp_1.c, execvp_1.c
+    
+    An "exec" functions replaces the current process with a new process specified
+    by the path or file argument.
+    "exec" functions are normally used to handoff the execution of your program to
+    another.
+    The new process started by exec functions inherits many features 
+    from the original.
+    And also note that there is no reference to a process called execl_1 in output.
+    
+    
+3)  fork function:
+        #include <sys/types.h>
+        #include <unistd.h>
+        
+        pid_t fork(void);
+        
+        We can create a new process by calling fork.
+        The function call duplicates the current process, creating a new entry
+        in the process table with many of the same attributes as the current
+        process.
+        
+        The call to fork in the parent returns the PID of the new child process.
+        The new process continues to execute just like the original, with the
+        exception that in the child process, the call to fork returns 0.
+        
+        If fork returns -1: means fork failed
+        If fork returns 0: means the current process is the child process
+        If fork returns a +ve value(processid of the child), it means current 
+        process is the parent process.
+        
+        examples: fork1.c
+        
+        In fork1.c, the program runs two processes, a child is created and 
+        prints message five times.The original process(parent) prints a message 
+        only three times.
+        The parent process finishes before the child has printed all of its 
+        messages, so the next shell prompt appears mixed in with the output.
+        
+        To overcome this, we go for "wait" function.
+        
+4)  fork and wait function:
+
+        #include <sys/types.h>
+        #include <unistd.h>
+        
+        pid_t fork(void);
+        pid_t wait(int *stat_loc);
+        
+        examples: fork2.c
+        
+        Here, we can arrange for the parent process to wait until the
+        child finishes before continuing by calling "wait".
+        The "wait" system call causes a parent process to pause until 
+        one of its child processes is stopped.The call returns the PID of the
+        child process, this will normally be a child process that has
+        terminated.
+        The status infon allows the parent process to determine the exit status 
+        of the child process, that is, the value returned from main or passed 
+        to exit.
+        If stat_loc is not a null pointer, the status infon will be written to 
+        the location to which it points.
+        
+5)  fork, wait and signal handling:
+    
+        example: fork1_a.c
+        Here we write a program with two functions "boom" (for signal handling)
+        and sum(a function for taking user input and calculation).
+        
+6)  fork-pause-alarm (sending and handling signals):
+    
+        example: alarm.c, alarm_1.c
+        
+        #include <unistd.h>
+        unsigned int alarm(unsigned int seconds);
+        
+        int pause(void);
+        
+        The alarm clock simulation program starts a new process via fork.
+        The child process sleeps for five secs and then sends a SIGALRM to its
+        parent.
+        
+        The parent arranges to catch SIGALRM and then pauses until a 
+        signal is received.
+        
+        In alarm_1.c, we used two variations one for raising alarm and other 
+        for handling signal.
+        
+7)  sigact (a robust signal interface):
+        examples: ctrlc.c, ctrlc2.c, sigact1.c
+        
+    #include <signal.h>
+    int sigaction(int sig, const struct sigaction *act, struct sigaction *oact);
+        
+    The sigaction structure is used to define the actions to be taken on receipt
+    of the signal specified by sig, is defined in signal.h and has atleast 
+    the follwing members.
+    i) void(*)(int) sa_handler //function, SIG_DFL or SIG_IGN
+    ii) sigset_t sa_mask // signals to block in sa_handler
+    iii) int sa_flags // signal action modifiers.
+    
+    examples: sigact1.c
+    
+ 8) signal sets:
+        #include <signal.h>
+        
+    These sets are used in "sigaction" and other functions to modify process
+    behavior on receipt of signals.
+    
+    int sigaddset(sigset_t *set, int signo); //adds a sgl(sig no) from a sgl set
+    int sigemptyset(sigset_t *set);//initializes a sgl set to be empty
+    int sigfillset(sigset_t *set);initializes a sgl set containing all defined sgls.
+    int sigdelset(sigset_t *set, int signo);//deletes a sgl(sig no) from a sgl set.
+    
+    int sigismember(sigset_t *set, int signo);
+    // this determines whether the given signal is a member of a signal set.
+    
+    int sigprocmask(int how, const sigset_t *set, sigset_t *oset);
+    //This signal mask is the set of signals that are currently blocked and will
+    //therefore not be received by the current process.
+    
+    //"sigprocmask" can change the process signal mask in a number of ways 
+    //according to the "how" argument.
+    //new values for the signal mask are passed in the argument set if it isn't 
+    //null, and the previous signal mask will be written to the signal set "oset".
+    
+    // the "how" argument can take any of the following:
+    SIG_BLOCK: The signals in set are added to the signal mask.
+    SIG_SETMASK: The signal mask is set from set.
+    SIG_UNBLOCK: The signals in set are removed from the signal mask.
+    
+    //note that if the "set" argument is a null pointer, the value of "how" is 
+    //not used and the only purpose of the call is to fetch the value of the
+    //current signal mask into oset.
+    
+    
+    int sigpending(sigset_t *set);
+    //if a signal is blocked by a process, it won't be delivered, but
+    //will remain pending.A program can determine which of its blocked signals
+    // are pending by calling the function sigpending.
+    
+    int sigsuspend(const sigset_t *sigmask);
+    //the sigsuspend function replaces the process signal mask with the signal 
+    //set given by sigmask and then suspends execution.
+    
+    
+9) sigaction flags:
+    The sa_flags field of the sigaction structure used in sigaction may contain
+    the values shown in the following table to modify signal behavior:
+    SA_NOCLDSTOP: Don't generate SIGCHLD when child processes stop.
+    SA_RESETHAND: Reset signal action to SIG_DFL on receipt.
+    SA_RESTART: Restart interruptible functions rather than error with EINTR.
+    SA_NODEFER: Don't add the signal to the signal mask when caught.
+    
+10) Signals Reference list:
+
+        The default action for the signals in the following table is the
+        abnormal termination of the process with all the consequences of _exit(
+        which is like exit but performs no cleanup before returning to the kernel).
+        
+        SIGALRM: Generated by the timer set by the "alarm" function.
+        SIGHUP: Sent to the controlling process by a disconnecting terminal.
+        SIGINT: Typically raised from the terminal by typing CTRL+CTRL
+        SIGKILL: Typically used from the shell to forcibly terminate an errant 
+                process, because this signal can't be caught or ignored.
+        SIGPIPE: Generated by an attempt to write a pipe with no associated reader.
+        SIGTERM: Sent a request for a process to finish.
+        SIGUSR1, SIGUSR2: may be used by processes to communicate with each other,
+                possibly to cause them to report status infon.
+             
+        The default action of the signals in the next table also cause abnormal 
+        termination and additionally implement dependent actions such as creation 
+        of a core file.
+        
+        SIGFPE: Generated by a floating-point arithmetic exception.
+        SIGILL: An illegal instruction has been executed by the processor(usually
+                caused by a corrupt program or ivalid shared memory module).
+        SIGQUIT: Typically raised from the terminal by typing Ctrl + \
+        SIGSEGV: A Segmentation violation, usually caused by reading or writing 
+                at an illegal memory location.
+                
+        A Process is suspended by default on receipt of one of the signals in 
+        the following table:
+        
+        SIGSTOP: Stop executing(Can't be caught or ignored)
+        SIGTSTP: Terminal stop signal, often raised by Ctrl + Z
+        SIGTTIN, SIGTTOU: Used by shell to indicate that background jobs have
+                stopped bcos they need to read from the terminal or produce o/p.
+        
+        SIGCONT: Continue executing, if stopped.
+        SIGCHLD: Raised when a child process stops or exits.
+                
+    
+    
+    ADDITIONAL INFORMATION:
+    
+    1) "ps", "ps ax", "ps -f", "ps -l", "ps x", "ps -ef":
+    
+    UID: UID stands for User ID. It represents the user who owns the process.
+
+    PID: PID stands for Process ID. It is a unique identifier assigned to each 
+    running process by the operating system.
+
+    PPID: PPID stands for Parent Process ID. It indicates the PID of the 
+    parent process that spawned the current process.
+
+    C: C stands for CPU utilization. It represents the percentage of 
+    CPU time used by the process since it started.
+
+    STIME: STIME stands for Start Time. It shows the time 
+    when the process started executing.
+
+    CMD: CMD represents the command or the name of the program associated 
+    with the process. It provides information about the process's 
+    executable file or the command used to launch it.
+
+    TTY: TTY indicates the terminal or device associated with the process. 
+    It shows the terminal device or pseudo-terminal (PTY) where the 
+    process is running. If a process is not associated with any terminal, 
+    it will display a "?".
+
+    STAT: STAT represents the status of the process. 
+    It provides information about the current state of the process. 
+    Common values include:
+
+    R: Running
+    S: Sleeping
+    Z: Zombie
+    T: Stopped
+    D: Waiting for I/O
+    <: High-priority process
+    N: Low-priority process
+    +: Process is in the foreground process group
+    
+    TIME: TIME displays the cumulative CPU time used by the process 
+    since it started. It includes both user-mode and system-mode time.
+
+    NI: NI stands for Nice value. It indicates the priority of the process. 
+    Lower values indicate higher priority.
+    
+    %CPU: %CPU represents the percentage of CPU time used by the 
+    process since the last update.
+    
+    %MEM: %MEM indicates the percentage of physical memory (RAM) 
+    used by the process.
+        
+    
+    Processes in Linux can exist in different states, including:
+    
+    Running: The process is actively executing on a CPU core.
+    
+    Sleeping: The process is waiting for an event or resource to become 
+    available.
+    
+    Stopped: The process has been paused or halted and is not currently 
+    executing.
+    
+    Zombie: A terminated process that has completed its execution 
+    but its exit status has not yet been read by its parent process   
+    
+    
+    Ss: The process is a session leader. It is the leader of a session 
+    that may contain multiple processes.
+
+    SN: The process is a session leader, and it has no controlling terminal.
+
+    S<: The process has a high-priority (real-time) scheduling policy. 
+    It is considered a high-priority process.
+    
+    S<s: The process has a high-priority (real-time) scheduling policy, 
+    and it is in the foreground process group.
+    
+    S1: The process has a real-time scheduling policy with a priority of 1. 
+    This indicates a high-priority real-time process.
+    
+    Ss+: The process is a session leader and is in the foreground process 
+    group. It represents a session leader in the active foreground.
+    
+    SN1: The process is a session leader, has no controlling terminal, and 
+    has a real-time scheduling policy with a priority of 1.
+    
+    R+: The process is running and is in the foreground process group. It 
+    indicates an active process in the foreground.
+            
+    
+    2) Group of exec functions:
+    The exec functions are typically used after forking a new process to 
+    execute a different program in the child process.
+
+    Here are the commonly used exec functions in Linux:
+
+    int execl(const char *path, const char *arg0, ..., const char *argn, (char *) NULL):
+    
+    This function replaces the current process image with a new program 
+    specified by the file path. It takes the program path as the 
+    first argument and a variable number of arguments representing 
+    the command-line arguments of the new program. The argument list 
+    must be terminated with (char *) NULL.
+    
+    int execv(const char *path, char *const argv[]): 
+    
+    Similar to execl(), this function replaces the current process image 
+    with a new program specified by the file path. However, instead of passing 
+    individual arguments, it takes an array of null-terminated strings as the 
+    command-line arguments. The last element of the array must be a NULL pointer.
+    
+    int execle(const char *path, const char *arg0, ..., const char *argn, char *const envp[]):
+    
+    This function is similar to execl(), but it also allows you to specify 
+    the environment variables for the new program. The environment variables
+    are passed as an array of strings (envp[]), where each element is of the 
+    form "variable=value". Like execv(), the argument list must be terminated 
+    with (char *) NULL.
+    
+    int execve(const char *path, char *const argv[], char *const envp[]): 
+    
+    This function is similar to execle(), but instead of passing individual 
+    arguments, it takes an array of command-line arguments (argv[]) and 
+    an array of environment variables (envp[]).
+    
+    int execvp(const char *file, char *const argv[]): 
+    
+    This function replaces the current process image with a new program, 
+    searching for the program in the directories listed in the PATH environment 
+    variable. It behaves similarly to execv(), but the file name can be 
+    specified without a path, and it searches for the program 
+    in the directories specified by PATH.
+    
+    These exec functions provide flexibility in executing new programs
+    within a process. They allow you to specify the program path, 
+    command-line arguments, and even environment variables for the new program. 
+    They are commonly used in combination with the fork() function to create 
+    new processes and execute different programs in those processes.
+
+    3) Difference between an Orphan process and Zombie process:
+    
+    In summary, orphan processes are created when the parent process exits or 
+    terminates before its child processes. These orphan processes continue 
+    their execution and are inherited by the init process. The init process 
+    ensures that orphaned processes do not remain indefinitely in the system 
+    and manages their termination and resource cleanup.
+    
+    On the other hand, a zombie process is a different situation. 
+    A zombie process is a process that has completed its execution 
+    but still has an entry in the process table. This entry exists because
+    the process's exit status is still needed by its parent process. 
+    A zombie process remains in the process table until its parent process 
+    reads the exit status using the wait() system call or its variants.
+    
+    Zombie processes are typically short-lived and do not consume system 
+    resources other than an entry in the process table. The responsibility 
+    of cleaning up zombie processes lies with the parent process. Once the 
+    parent process reads the exit status of its child process, the zombie 
+    process is removed from the process table, and its resources are released.
+    
+    In summary, orphan processes and zombie processes are distinct concepts:
+
+    Orphan processes are child processes that continue to run after their 
+    parent process has finished. They are adopted by the init process, and 
+    the init process becomes their new parent.
+    
+    Zombie processes, on the other hand, are processes that have completed 
+    their execution but still have an entry in the process table, waiting 
+    for their parent process to retrieve their exit status.
+    
+    It's important to handle both orphan processes and zombie processes 
+    appropriately to ensure efficient process management and resource 
+    utilization in a system.
+
+    Zombie processes are typically short-lived and do not cause any harm. 
+    However, if zombie processes persist for a long time, it may indicate 
+    a problem with the parent process not correctly handling the termination 
+    its child processes or not calling the appropriate system calls 
+    (e.g., wait() or waitpid()) to retrieve the exit status of its child 
+    processes and clean up their entries from the process table.
+
+

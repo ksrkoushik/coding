@@ -1,0 +1,174 @@
+There are many CLI text editors nano, pico, vi/vim, gedit etc.
+In this file, we will mostly knowing about vi/vim editor.
+
+To install vim editor, depending on OS, we have to use the following commands:
+
+ sudo apt install vim --> for ubuntu
+ sudo dnf install vim --> for centos
+ 
+ BASICS- I:
+ 
+ 1) opening a file: vi <filename>
+     ex: vi abc.txt
+         vi ./dir1/dir2/<filename>
+    note that vim tries to open the file if it exists and if it does not exists,
+    it will create a new file.
+    
+    vi <relative path to file>
+    vi <absolute path to file>
+    A file can be opened both with absolute or relative path to the file.
+ 
+ 2) vim modes: command, insert, last lines
+    By default a file opens in command mode:
+       pressing 'x' deletes the letter highlighted by cursor.
+       pressing 'r' helps you replace the letter highlighted by cursor.
+       
+    To change the mode, just press 'ESC' button once/twice.
+    
+    If you want to insert text into the file, you need to get into insert mode,
+    this can be done by pressing 'i' and then you can insert/edit the text 
+    in the file.
+    note that whenever you press 'ESC' it will enter command mode.
+    
+       pressing 'I' in command mode will take you into the insert mode with 
+       cursor at the beginning of the line to insert text.
+       
+       pressing 'a' in command mode will take you into the insert mode to append
+       the text immediately after the cursor.
+       
+       pressing 'A' in command mode will take you into the insert mode with
+       cursor at the end of the line to insert/append text.
+       
+       pressing 'o' in command mode will take you into the insert mode with
+       cursor at the start of the new line to insert the text.
+       
+       pressing 'O' in command mode will take you into the insert mode with 
+       cursor at the beginning of one line above.
+       
+       
+    In short, to move into insert mode from command mode, we have
+    the following options: i, I, a, A, o, O
+    
+    To get into Lastline mode: press ESC and "shift + :", then we can see ":" in the 
+    last line.
+    
+       pressing :q! qutiing the file without saving
+       pressing :wq or wq! will save and quit the file
+       pressing :w! saving the file without closing it
+    
+    Imp shorcut, to save and quit any file by pressing ESC 
+    and then press shift + zz to save and exit the file.
+       
+       
+    BASICS- II
+    
+    for complete practice and tutorial, type vimtutor in the terminal and press
+    enter.
+    
+    After opening a file using vi editor, we can run any shell command
+    by using lastline mode.
+    for example
+    :!ls
+    :!pwd
+    :!ifconfig
+    
+    To search for a string in the given file of text, type /"string" in the 
+    command mode and press 'n' for next match and 'N' for previous match.
+    
+    If the cursor is at the end of the file, then to search from the top,
+    press ?"string" to find the search pattern.
+    
+    Typing "G" will take you to the last line in command mode.
+    
+    Pressing "*" in command mode to find the next similar pattern of the string 
+    under the cursor.
+    
+    pressing "#" in command mode to find the previous similar pattern of the 
+    string under the cursor.
+    
+    To search for a string and replace it using lastline mode:
+    :%s/<stringtobesearched>/<stringtobereplaced/g 
+    
+    By mistake if you did some error, just type 
+    :e! to ignore all the changes and take the file back to the state how it was
+    when it is opened.
+    
+    type 'u' to undo the recent operation
+    type ctrl + r to redo the operation
+    
+    Cutting, Copying and Pasting a line of text in vim editor
+    
+    cutting: pressing "dd" in command mode cuts a line where the cursor is present.
+    
+    pasting: move the cursor to the location where you want to paste and type'p'
+    
+    To cutting multiple lines below the cursor, 
+    for example, you want to delete 10 lines below the cursor, then press 10 and 
+    then type "dd" in command mode.
+    
+    COPYING:
+    press "v" to select characters.
+    press "V" to select lines and the press "y" to copy.
+    press ctrl + v to select rectangular blocks, use upper and lower keys for 
+    selection.
+    
+    once you select by pressing "V" and typing "y" to copy in the command mode,
+    and then use the up and down arrow keys to move the cursor to the location 
+    where you wnat to paste the copied lines of text.
+    
+    press "P" to paste before the cursor or "p" to paste after the cursor.
+    
+    In last line mode, press : "set nu" to display the line numbers.
+    If you dont want line numbers, "set nonu"
+    
+    In last line mode,
+    If we type :syntax on --> this will highlight with diff colors in the code.
+    If we type:syntax off --> this will remove all the highted colors of code.
+    
+    To make some permanent settings:
+    
+    In terminal type: vi ~/.vimrc to open the file and write the following 
+    commands:
+    set nu
+    syntax on
+    This will make sure that all the files will have line numbers and as well as
+    all the code blocks will have appropriate colors for syntax.
+    
+    
+    BASICS-III(Few more shortcuts)
+    
+    If you want to move to a specific line number, just type the line number 
+    in lastline mode:
+    ex:   :10 and press enter, this will take you to line 10
+          :4 and press enter, this will take you to line 4
+          
+    Typing "G" in command mode will take you to the last line.
+    Typing "gg" in command mode will take you to the beginning of the line.
+    
+    
+    Working with multiple files at once:
+    
+    vi <file1> <file>
+    
+    This opens two files at a time and first file can be viewed on the screen,
+    but to see the second file, go to lastline mode and
+    type :n to move to the second file.
+    
+    To get back to the first file, go to lastline mode and 
+    type :N or type :prev in lastline mode.
+    
+    vi -o <file1> <file2> This will open both the files by cascading windows one
+    on top of the other.
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+ 
+ 
+ 
+

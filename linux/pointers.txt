@@ -1,0 +1,101 @@
+All about Pointers:
+
+
+BASICS-I:
+
+A standard variable holds a standard value.
+But a Pointer variable holds an address of a standard variable.
+
+int *p; creation of a pointer 'p' for integer datatype
+void *p; creation of a pointer 'p' for void datatype.
+char *p; creation of a pointer 'p' for char datatype.
+float *p; creation of a pointer 'p' for float datatype.
+double *p; creation of a pointer 'p' for double datatype.
+
+Note that 'p' is just a name give to our pointer variable, we can use any name.
+
+<data-type> *<variable-name>
+
+'&'--> this specifies the address of a variable.
+
+Pointers initialization:
+
+int *p = NULL;
+
+Understanding passing by value and passing by refernce concepts.
+
+Operator '&'
+This holds the address of a variable.
+and the variables can be any variable either a standard varible or pointer variable.
+ex: &num, &arr[1], &ptr
+
+Pointer variables or Pointers
+These are special variables that hold addresses.
+The value assigned to pointer variables are simply addresses.
+Note that you shouldn't make an assignment of an address to a pointer variable
+that is not of the same type.
+
+Operator '*'
+Used for pointer variables
+It allows to access the content of the address it points to.
+
+
+BASICS-II:
+
+Pointers Arithmetic:
+It is Addresses Arithmetic.
+Mathematical operations on pointers.
+
+There are some rules to follow in pointer arithmetic:
+
+Addition/Subtraction is done in chunks of the size of the data type the pointer
+is pointing to.
+for examples, int, double, char
+
+int *ptr = 3000;
+ptr = ptr + 1; // 3000 + 1*sizeof(int) = 3000 + 1*4 = 3004
+ptr = ptr + 2; // 3000 + 2*sizeof(int) = 3000 + 2*4 = 3008
+
+char *ptr = 3000;
+ptr = ptr + 1;// 
+
+Pointer-Arithmetic Rules:
+
+1) Addition of Address and an integer:
+
+    new_addr = prev_addr + integer
+    //actually behind the scenes, this is what happens
+    new _addre = prev_addr + integer*sizeof(type)
+
+2) Subtraction of Address and an integer:
+    new_addr = prev_addr - integer
+    //actually behind the scenes, this is what happens
+    new_addr = prev_addr - integer * sizeof(type)
+    
+3) Address - Address = Integer
+
+Format specifiers used in 'C':
+
+"%d" : used to format integers
+"%f" : used to format floating point numbers
+"%c" : used to fomrat characters
+"%s" : used to format strings
+"%u" : used to format unsigned integers
+"%x" : used to format hexadecimal integers
+"%p" : used to format pointers
+"%e" : used to format scientific notation
+"%g" : used to format floating point numbers either in standard or scientific notation.
+"%o" : used to format octal numbers
+
+"%ld" : used to format long integers
+"%ls" : used to format wide character strings
+
+Passing format specifiers for pointers:
+"%p" : prints out hexadecimal form of mem address
+"%d" : prints out decimal form of mem address
+
+Understanding of pointers
+
+
+ 
+ 

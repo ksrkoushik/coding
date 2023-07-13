@@ -1,0 +1,355 @@
+CH13-Inter-Process Communication(Pipes):
+
+IPC refers to mechanisms and techniques used by OS to allow different processes
+to communicate each other.
+
+There are diff ways through which this can be achieved like by using pipes, 
+message queues, shared memory, sockets etc.
+
+ex: cmd1 | cmd2
+This is a simple example of using pipe to execute two commands.
+
+Process Pipes:
+The simplest way of passing data between two programs is with the popen and 
+pclose functions:
+
+#include <stdio.h>
+FILE *popen(const char *command, const char *open_mode);
+int pclose(FILE *stream_to_close);
+
+BUFSIZ is a predefined constant in C that represents the size of a buffer used 
+for I/O operations.It is defined in <stdio.h>.
+
+memset is a fn used to set a block of memory to a specified value.
+void *memset(void *ptr, int value, size_t num);
+
+size_t fread(void *ptr, size_t size, size_t count, FILE *stream);
+ex: bytes_read = fread(buffer, sizeof(char), sizeof(buffer), file_ptr);
+
+int pclose(FILE *stream);
+
+What does fread, fwrite, fgets, fputs do?
+
+fread:this fn reads data from a file stream into a buffer.
+size_t fread(void *ptr, size_t size, size_t count, FILE *stream);
+
+fwrite: this fn writes data from a buffer to a file stream.
+size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream);
+
+fgets: this fn reads a line of text from a file stream into a buffer.
+char *fgets(char *str, int num, FILE *stream);
+
+fputs: this fn writes a string of text to a file stream.
+int fputs(const char *str, FILE *stream);
+
+sprintf:this fn works like printf but instead of printing the formatted string
+to the standard output, it stores the string in the buffer pointed to by str.
+int sprintf(char *str, const char *format, ...);
+
+
+examples: popen1.c, popen1_a.c, popen1_b.c, memset.c, file_ops.c, popen2.c, sprintf.c
+
+popen3.c, popen4.c
+
+popen1.c, popen1_a.c, popen1_b.c (Reading output from an external program) :
+
+This program uses the popen call to invoke the uname command with -a parameter.
+It then uses the returned file stream to read data up to BUFSIZ characters and
+then prints it out so it appears on the screen.Because we have captured the 
+output of uname inside a program, it's available for processing.
+
+popen2.c (Sending output to an external program):
+This program uses popen with the parameter "w" to start the od -c command, 
+so that it can send data to that command.It then sends a string that the od -c
+command then prints the result of the processing on its standard output.
+But this mechanism helps in sending or receiving all the data in a single 
+fread or fwrite.But sometimes, we may want to send the data in smaller pieces or 
+perhaps do not know the size of the output.So, to avoid having to declare a 
+very large buffer, we can just use multiple fread or fwrite calls and process 
+the data in parts.
+
+popen3.c (Reading Larger Amounts of Data from a pipe):
+In this program, it continues reading from the file stream until there is no
+more data available.we executed "ps ax" from the popen.
+Linux somehow arranges process scheduling so that both programs  run when they 
+can.If the reader process, popen3, has no input data, its suspended until some 
+becomes available.If the writer process, ps, produces more output than can 
+be buffered, its suspended until the reader has consumed some of the data.
+
+popen4.c (popen starts a shell):
+This program counts the number of lines in all popen example source files by
+cating the files and then piping the output to wc -l, which counts the number
+of lines.
+
+The Pipe Call:
+
+When compared to popen or any other system call, the pipe call gives us more control
+over reading and writing data.
+
+This Pipe function provides a means of passing data between two programs.
+
+#include <unistd.h>
+int pipe(int file_descriptor[2]);
+
+Pipe is passed(a pointer to) an array of two integer file descriptors.
+It fills the array with two new file descriptors and returns a zero.
+On failure, it returns -1 and sets errno to indicate the reason for failure.
+
+Errors defined in the Linux manual page for pipe are:
+
+EMFILE: Too many file descriptors are in use by the process.
+ENFILE: The system file table is full.
+EFAULT: The file descriptor is not valid.
+
+The two file descriptors returned are connected in a special way.
+Any data written in file_descriptor[1] can be read back from file_descriptor[0].
+This data is processed in first in, first out basis(FIFO).
+
+But It is imp to realize that these are file descriptors, not file streams, so 
+you must use the lower-level read and write system calls to access the data, 
+rather than the system library functions fread and fwrite.
+
+examples: pipe1.c, pipe2.c
+
+pipe1.c (The basic pipe function):
+This program creates a pipe using the two file descriptors in the array 
+file_pipes[].It then writes data into the pipe using the file descriptor 
+file_pipes[1] and reads it back from file_pipes[0].
+The two file descriptors returned are connected in a special way.Any data 
+written to file_descriptor[1] can be read back from file_descriptor[0].The
+data is processed in a first in, first out basis(FIFO).
+This means that if you write the bytes 1,2,3 to file_descriptor[1], reading from
+file_descriptor[0] will produce 1,2,3.This is different from a stack which 
+operates on a last-in,first out (LIFO) basis.
+
+pipe2.c (Pipes across a fork):
+Although the output looks same as that of pipe1.c, but here we were able to use
+separate processes for the reading and writing.
+
+The program first creates a pipe with the pipe call and it then uses the fork 
+call to create a new process(child).If the fork was successful, the parent writes data 
+into the pipe, while the child reads data from the pipe.Both parent and child
+exit after a single write and read.But if the parent exits before the child, 
+you might see the shell prompt b/w the two outputs.
+
+pipe3.c (DATA PRODUCER and DATA CONSUMER):
+(Parent and Child processes with Pipes and exec):
+The pipe3 program starts like the previous example of pipe2, using the pipe call 
+to create a pipe and then using the fork call to create a new process.
+It then uses sprintf to store the "read" file descriptor number of the pipe in 
+a buffer that will form an argument of pipe4.
+
+A call to execl is used to invoke the pipe4 program.
+The arguments to execl are:
+1) The program to invoke
+2) argv[0], which takes the program name
+3) argv[1], which contains the file descriptor number you want the program
+to read from.
+4) (char *)0, which terminates the parameters.
+
+The pipe4 program extracts the file descriptor number from the argument string
+and then reads from that file descriptor to obtain the data.
+
+Till now in all the above programs, we have seen that the reading and writing 
+process is much in a static way...that we have allowed the reading process to 
+simply read some data and then exit, assuming that Linux will clean up the files
+as part of the process termination.
+But this is not always an efficient way of reading and writing.
+
+There is another way of reading data from standard input which does a bit
+differently.
+They dont usually know how much data they have to read, so they will normally 
+loop hence reading data, processing data and then reading more data until 
+there's no more data to read.
+A read call will normally block, i.e it will cause the process to wait until 
+data becomes available.If the other end of the pipe has been closed, then no 
+process has the pipe open for writing, and the read blocks.Because this isn't 
+very helpful, a read on a pipe that isn't open for writing return zero rather 
+than blocking.This allows the reading process to detect the pipe equivalent 
+of end of file and act appropriately.
+
+pipe5.c(Pipes and dup):
+PIPES USED AS STANDARD INPUT AND OUTPUT:
+This is a much cleaner method of connecting two processes with a pipe.
+Here, we arrange for one of the pipe file descriptors to have a known value, 
+usually the standard input,0 or the standard output,1.This is slightly more
+complex to set up in the parent, but it allows the child program to be much 
+simpler.
+
+The big adv here is that we can invoke standard programs that don't expect a 
+file descriptor as a parameter.But, we need to use the "dup" function.
+There are two closely related versions of "dup" that have the following 
+prototypes:
+
+#include <unistd.h>
+int dup(int file_descriptor);
+int dup2(int file_descriptor_one, int file_descriptor_two);
+
+The purpose of the dup call is to open a new file descriptor, much like the 
+open call.
+
+In pipe5.c program:
+It creates a pipe and then forks, creating a child process.At this point, both
+parent and child will have file descriptors that access the pipe, one each for 
+reading and writing, so there will be four open file descriptors in total.
+
+What does child do?
+It closes its standard input with close(0) and then calls dup(file_pipes[0]).
+This duplicates the file descriptor associated with the read end of the pipe
+as file descriptor 0, the standard input.
+It then closes the original file descriptor file_pipes[0] and also file_pipes[1].
+So, finally it will have only a single file descriptor associated with pipe:
+file descriptor 0, its standard input.
+
+The child can then use exec to invoke any program that reads standard input.
+In this case, here we use od command.The od command will wait for data to be 
+available to it as if it were waiting for input from a user terminal.
+
+What does Parent do?
+The Parent starts by closing the read end of the pipe file_pipes[0], because it 
+will never read the pipe.It then writes data to the pipe.When all the data has 
+been written, the parent closes the write end of the pipe and exits.Because there
+are now no file descriptors open that could write to the pipe, the od program
+will be able to read the three bytes written to the pipe, but subsequent reads 
+will then return 0 bytes, indicating an end of file.
+When the read returns 0, the od program exits.This is analogous to running the
+od command on a terminal, then pressing Ctrl + D to send end of the file to the 
+od command.
+
+NAMED PIPES:
+These are mostly used when we desire unrelated processes to exchange data b/w
+them.This can be done with FIFOs often referred to as named pipes.
+
+A named pipe is a special type of file(note that in linux everything is a file) 
+that exists as a name in the file system but behaves like the unnamed pipes 
+that we have met already.
+
+We can create named pipes from command line and from within a program.There 
+are two ways of creating named pipes:
+mknod filename p
+mkfifo filename
+
+From within a program, we can use two different calls:
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int mkfifo(const char *filename, mode_t mode);
+int mknod(const char *filename, mode_t mode | S_IFIFO, (dev_t) 0);
+
+examples: fifo1.c, fifo1_a.c,
+
+fifo1.c:
+
+After executing ./fifo1, notice that the character os output is a p, indicating 
+a pipe.
+The symbol | at the end is added by the ls command's -F option and also 
+indiactes a pipe.
+
+The program uses mkfifo function to create a special file.Although we ask for a
+mode of 0777, this is altered by the user mask(umask) setting(in this case 022),
+just as in normal file creation, so the resulting file has mode 755.
+We can remove the FIFO just like a conventional file by using rm command or from
+within a program by using the unlink system call.
+
+Unlike a pipe created with the pipe call, a FIFO exists as a named file, not as
+an open file descriptor, and it must be opened before it can be read from or 
+written to.We open and close a FIFO using the same open and close functions that 
+we used earlier for files, with some additional functionality.The open call is 
+passed the path name of the FIFO, rather than that of a regular file.
+
+Accessing a FIFO file:
+
+1) cat < ./tmp/my_fifo1: This opens up the fifo file named my_fifo1..now this is 
+ready to written to..
+
+2) Now open a new terminal and try to write something to the opened fifo file.
+echo "Hello World" > ./tmp/my_fifo1
+
+Now open the first terminal where the fifo file was opened and you can see the 
+output appearing below the cat command.
+
+The above two steps can be executed simultaneously in the same terminal making 
+the fifo file opened as a background process.
+1) cat < ./tmp/my_fifo1 &
+2) echo "Hello World" > ./tmp/my_fifo1
+In this the cat process is initially blocked in the background and when echo
+makes some data available, the cat command reads the data and prints it to the
+standard output.
+Notice that the cat program exits without waiting for more data.It doesn't block 
+because the pipe will have been closed when the second command putting data in 
+the FIFO completed, so it calls to read in the cat program will return 0 bytes,
+indicating the end of the file.
+
+fifio2.c:
+
+Opening FIFO files:
+
+Case-1: O_RDONLY and O_WRONLY without O_NONBLOCK
+
+1) open terminal and type ./fifo2 O_RDONLY &
+2) Next line type ./fifo2 O_WRONLY
+
+This allows the reader process to start and wait in the open call and then allows 
+both programs to continue whenthe second program opens the FIFO.Notice that both
+the reader and writer processes have synchronized at the open call.
+Note that when a linux process is blocked, it doesn't consume CPU resources, so 
+this method is very CPU-efficient.
+
+Case-2: O_RDONLY with O_NONBLOCK and O_WRONLY
+
+1) open terminal and type ./fifo2 O_RDONLY O_NONBLOCK &
+2) Next line type ./fifo2 O_WRONLY
+
+The summary of both above cases is that a read on an empty blocking FIFO(that is
+one not opened with O_NONBLOCK) will wait until some data can be read.Conversely,
+a read on a nonblocking FIFO with no data will return 0 bytes.
+
+A write on a full blocking FIFO will wait until the data can be written.
+A write on a FIFO that can't accept all of the bytes being written will either:
+* Fail, if the request is for PIPE_BUF bytes or less and the data can't be written.
+* Write part of the data, if the request is for more than PIPE_BUF bytes, returning
+the number of bytes actually written, which could be 0.
+
+Note that the size of a FIFO is an imp consideration, a fifo file can normally 
+accept 4096 bytes at a time and it may vary depending on the system.
+
+fifo3.c and fifo4.c:
+
+Both programs use the FIFO in blocking mode.
+You start fifo3 (the writer/producer) first, which blocks, waiting for a reader
+to open the FIFO.When fifo4 (the consumer) is started, the writer is then unblocked
+and starts writing data to the pipe.At the same time, the reader starts reading 
+data from the pipe.
+Linux arranges the scheduling of the two processes so that they both run when
+they can and are blocked when they can't.Thus, the writer is blocked when the 
+pipe is full, and the reader is blocked when the pipe is empty.
+
+Advanced Topic: Client/Server Using FIFOs
+In this we want to have a single-server process that accepts requests, processes 
+them and returns resulting data to the requesting party:client.
+
+Here, we will try to understand how named pipes can be used.
+Because the server will process only one block of infon at a time, it seems 
+logical to have a single FIFO that is read by the server and written to by each 
+of the clients.
+By opening the FIFO in blocking modes, the server and the clients will be 
+automatically blocked as required.
+
+we create a client.h file which is common to both client and server programs.
+It also includes the required system headers for convenience.
+In client.h we create a structure which has a pid_t for client and also some_data
+for holding for data.
+
+server.c:
+The server creates its FIFO in read-only mode and blocks.It does this 
+until the first client connects by opening the same FIFO for writing.here
+the client FIFO is opened in write only blocking mode and finally the server 
+FIFO is shutdown by closing the file and unlinking the FIFO.
+
+client.c:
+here the server fifo is opened in write  blocking mode and hence the client
+data sent to the server, hence client FIFO is opened in read only blocking mode.
+And finally the server FIFO is closed and the client FIFO is removed from the
+file system.
+
+

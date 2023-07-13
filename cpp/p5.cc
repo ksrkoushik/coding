@@ -1,24 +1,12 @@
+/* my fifth 
+program */
+
 #include <iostream>
 using namespace std;
-
-void line(), message();
-
-int main()
+int main(int argc, char *argv[])
 {
-	cout << "Hello! The program starts in main().\n";
-	line();
-	message();
-	line();
-	cout << "This is the end of main().\n";
+	cout << "Hello world!\n"; // prints Hello world!
+	cout << "I love C++\n"; /* prints
+	I love C++ */
 	return 0;
-}
-
-void line()
-{
-	cout << "-------------------------\n";
-}
-
-void message()
-{
-	cout << "In function message().\n";
 }

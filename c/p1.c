@@ -1,7 +1,12 @@
 #include <stdio.h>
-int main()
+#include <stdlib.h>
+#include <math.h>
+int a,b,sum;
+int main(int argc, char *argv[])
 {
-	int distance = 100;
-	printf("You are %d miles away.\n", distance);
+	a = 5;
+	b = 57;
+	sum = a + b;
+	printf("The sum is %d\n", sum);
 	return 0;
 }

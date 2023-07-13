@@ -1,0 +1,115 @@
+ALL ABOUT SELINUX(Security Enhanced Linux):
+
+standard discretionary access control ---> Mandatory access control.
+
+ex1: 
+ls -l file1.txt
+
+-rw-r--r--. 1 ec2-user ec2-user 242 Apr 14 10:57 file1.txt
+This will show the standard discretionary access for the file file1.txt.
+
+ls -Z file1.txt
+
+-rw-r--r--. ec2-user ec2-user system_u:object_r:user_home_t:s0 file1.txt
+This is called the SELinux context.It consists of user, role, type and security level.
+The above info is the SELinux context of the file file1.txt.
+
+SELinux policy rules are checked only after checking discretionary access control(DAC).
+If DAC rules deny the access then SELinux policy rules are not followed.
+Access is allowed only if the selinux policy rule exists for interaction between 
+files and processes or interaction among the processes.
+
+SELinux policy rules define how processes access files and other processes.
+SELinux can be used to enforce data confidentiality and integrity as well as 
+protecting processes from untrusted inputs.
+
+SELinux decisions such as allowing or disallowing access are cached.This cache 
+is known as Access Vector Cache(AVC).
+
+SELinux has three modes:
+
+Enforcing: denies access based on policy rules.
+
+Permissive: does not deny access but denials are logged for actions that would 
+have been denied if running in selinux mode.
+
+Disabled: selinux is disabled.Only DAC rules are used.
+
+sestatus: gives the present selinux mode.
+getenforce: gives the mode of selinux.
+setenforce: can change the mode of selinux (0: permissive, 1: enforcing)
+
+imp locations: 
+/etc/selinux/config
+This is the location of selinux config file where we can change the settings.
+
+/etc/selinux/targeted/setrans.conf
+
+
+All the files/directories will have their own selinux context.
+
+selinux context follow the selinux user:role:type:level syntax.
+
+some commands:
+sestatus
+setenforce
+getenforce
+ls -Z
+id -Z
+
+Domain transitions in selinux:
+
+entry point permission is used in selinux policy and controls the application
+can be used to enter a domain.
+
+An selinux policy rule states that processes running in one domain are allowed 
+to read and write to files labelled in another domain.
+ex: executing password utility passwd.
+An selinux policy rule states that the passwd_t domain has an entry point 
+permisison to the passwd_exec_t type.
+
+selinux context for processes:
+ps -eZ
+ps -eZ | grep <process name>
+
+
+Targeted Policy in SELinux:
+
+It is the default policy in which the processes that are tageted run in confined
+domain and the processes that are not tagreted run in an unconfined domain.
+
+Confined Process:
+When a process is confined, it runs in its own domain such as the httpd process
+running in httpd_t domain.If a confined process is compromised by an attacker, 
+depending on SELinux policy configuration, an attacker's access to resources and 
+the possible damage they can do is limited.
+
+example for a Confined Process:
+
+The following example demonstartes how Apache HTTP server (httpd) from reading 
+files that are not correctly labelled, such as files intended for use by samba.
+sestatus
+sudo touch /var/www/html/testfile
+ls -Z /var/www/html/testfile
+o/p: -rw-r--r--. root root unconfined_u:object_r:httpd_sys_content_t:s0 /var/www/html/testfile
+
+sudo systemctl start httpd.service
+ls -Z /var/www/html/testfile
+sudo chcon -t samba_share_t /var/www/html/testfile
+ls -Z /var/www/html/testfile
+
+chcon: This command relabels files, however such label changes do not survive 
+when the file system is relabeled.For permanent changes that survive a file system 
+relabel, we use the semanage utility.
+As root, run the following command to change the type to a type used by samba.
+sudo chcon -t samba_share_t /var/www/html/testfile
+sudo wget http://localhost/testfile  
+sudo systemctl stop httpd.service
+sudo rm -i /var/www/html/testfile
+
+
+
+
+
+
+
