@@ -1,6 +1,4 @@
-def subtract(a,b):
-    c = a - b
-    print(f"The difference value is {c}\n")
-    return 0
-
-subtract(75645, 67567)
+print("""Oh what\n
+a happy day!\n
+Oh yes,\n
+what a happy day!\n""")
