@@ -1,0 +1,69 @@
+1) MAC or PHY Address:
+	Medium Access Control or Physical Address.
+	It is a 48 bit, 12 digit number.
+	first 6 digits: vendor or company ID
+	Last 6 digits: Internet address
+	getmac (on windows)
+	ifconfig(linux)
+
+2) IP Address:
+		IPv4			IPv6
+		32 bit			128 bit
+		classful        	unlimited
+		4 block			8 block
+		8 bits x 4 blocks	16bits x 8 blocks
+
+	Class A: 10.0.0.0 - 10.255.255.255 	S/N: 255.0.0.0,     Ranges from 1 - 127
+	Class B: 172.16.0.0 - 172.31.255.255	S/N: 255.255.0.0    Ranges from 128 - 191
+	Class C: 192.168.0.0 - 192.168.255.255  S/N: 255.255.255.0  Ranges from 192 - 223
+	Class D,E are reserved for experimetal or scientific research.
+	Note that 127.0.0.1 is reserved for loopback address.
+
+3) DNS (Domain Name Server):
+	IP <----> Name
+	DNS Port No: 53
+	Uses TCP/UDP Protocol
+	nslookup <website-url> will give the corresponding IP Address
+	Test the following in terminal (make sure that you have internet connection):
+	nslookup
+	>server 8.8.8.8
+	>set type=ns
+	>google.com
+
+4) All about ALIASES:
+Aliases are like shorcuts for command names.
+The aliases can be created in two ways: temporary and permanent.
+for example: alias = lh = 'ls -l /root'
+for removing alias, type unalais lh
+
+creating/deleting permanent alias
+open .bashrc file or .zshrc file based on the type of shell you use and edit it by giving your aliases
+for example: 
+alias rm = 'rm -i'
+alias cp = 'cp -i'
+alais mv = 'mv -i'
+
+5) Practice the following commands:
+	which ll
+	which echo
+	which cat
+	type ll
+	type cat
+	type host
+	echo $PATH
+
+Understanding the difference between internal and external commands:
+	INTERNAL COMMANDS: 
+        These are part of the shell.
+        These execute fast as they directly run from the shell.
+        These provide only basic functionalities.
+        Theses always run from RAM.
+
+	EXTERNAL COMMANDS:
+        These are not part of the shell.
+        These are slow as they run from the disk.
+        These provide all functionalities.
+        These are complex.
+        These commands run first time from the disk.
+
+
