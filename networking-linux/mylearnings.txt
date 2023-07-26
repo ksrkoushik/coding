@@ -1,3 +1,5 @@
+Date (23072023):
+
 1) MAC or PHY Address:
 	Medium Access Control or Physical Address.
 	It is a 48 bit, 12 digit number.
@@ -31,17 +33,17 @@
 	>google.com
 
 4) All about ALIASES:
-Aliases are like shorcuts for command names.
-The aliases can be created in two ways: temporary and permanent.
-for example: alias = lh = 'ls -l /root'
-for removing alias, type unalais lh
+	Aliases are like shorcuts for command names.
+	The aliases can be created in two ways: temporary and permanent.
+	for example: alias = lh = 'ls -l /root'
+	for removing alias, type unalais lh
 
-creating/deleting permanent alias
-open .bashrc file or .zshrc file based on the type of shell you use and edit it by giving your aliases
-for example: 
-alias rm = 'rm -i'
-alias cp = 'cp -i'
-alais mv = 'mv -i'
+	creating/deleting permanent alias
+	open .bashrc file or .zshrc file based on the type of shell you use and edit it by giving your aliases
+	for example: 
+	alias rm = 'rm -i'
+	alias cp = 'cp -i'
+	alais mv = 'mv -i'
 
 5) Practice the following commands:
 	which ll
@@ -52,7 +54,7 @@ alais mv = 'mv -i'
 	type host
 	echo $PATH
 
-Understanding the difference between internal and external commands:
+	Understanding the difference between internal and external commands:
 	INTERNAL COMMANDS: 
         These are part of the shell.
         These execute fast as they directly run from the shell.
