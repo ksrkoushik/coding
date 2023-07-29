@@ -1,0 +1,5 @@
+name = input("What is your name: ")
+print("-------------------------\n")
+print(f"Hello {name}\n")
+print(f"Your name is {len(name)} characters long\n")
+print("--------------------------\n")
