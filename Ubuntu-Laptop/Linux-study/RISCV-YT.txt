@@ -99,6 +99,41 @@
 	git checkout v0.8
 	make PLATFORM=generic FW_PAYLOAD_PATH=../u-boot-2023.07.01/u-boot.bin
 		Getting errors after running this line
+
+	Resolved the Error with the following command:
+	And also add "-fno-stack-protector" to second CFLAGS in Makefile
+	make distclean && make PLATFORM=generic FW_PAYLOAD_PATH=../u-boot-2023.07.01/u-boot.bin
+	Here, we compiled firmware(fw_payload) using U-boot booted with qemu(an emulator).
+
+	G) BUILDING THE LINUX KERNEL:
+	Initially tried to build linux-6.4.10.tar.xz, but got errors and then searched through internet, 
+	got to know that linux-5.10.61.tar.xz will work well.
+ 
+	Go to riscv/
+	wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.61.tar.xz
+	tar xf linux-5.10.61.tar.xz
+	cd linux-5.10.61
+	ls -la arch/riscv
+		check the folders
+
+	vi ../riscv64-env.sh
+		add this line: export ARCH=riscv
+	make help | grep defconfig
+	make defconfig
+	make menuconfig
+		try to tweak and select the desired architecture
+		Got few errors, then as per the error suggestions, executed the following lines
+	sudo apt install libelf-dev
+	make menuconfig
+		just saved the default/existing x86 architecture
+	time make -j8
+		This build the linux kernel image to the following folder
+		linux-5.10.61/arch/x86/boot/bzImage
+		If it is riscv image
+		linux-5.10.61/arch/riscv/boot/Image
+
+
+	
 	
 	
 	
