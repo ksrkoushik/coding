@@ -1,0 +1,22 @@
+1) Brief Intro about Linux/Embedded Linux:
+	It is perfect OS's with fixed set of features.
+	Linux Kernel is standalone and there are no complex dependencies against external software.
+	Linux is written completely in C.
+	Requires few MB of RAM and less storage.
+
+2) RISC-V: (Reduced Instruction Set Computer - V) and the five symbol represents the generation.
+	Unlike the other commonly available ISA's like x86, ARM, AMD64, RISC-V is available open source.
+	Here, We get started with the QEMU emulator which simulates a virtual board with virtio.
+
+3) Most Imp aspects of Embedded Linux Development work:
+	Building a Cross-Compiling Tool Chain:Build-root
+		What is Cross-Compiler? Source Code -> Compiling Machine(x86 binary) -> Cross-Compiling Toolchain->Executing Machine (RISC-V binary)
+		Native Tool Chain: Generates Binary for the same architecture.
+		Cross-Compiling Tool Chain: Generates Binary for some new architecture like RISC-V.
+	Creating a disk image:
+	Firmware/First stage Boot Loader: OpenSBI(Supervisory Binary Interface)
+	Booting using a boot loader: U-Boot
+	Loading & Starting the Linux Kernel: From U-Boot
+	Building a root file system with some basic utilities: Busy-Box
+	Configuring the way the system starts:
+	Setting up Networking and Controlling the system via a web interface:
