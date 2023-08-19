@@ -1,0 +1,20 @@
+git fundamentals:
+	git init
+	git remote add origin <URL-PATH>
+	git status
+	git add .
+	git commit -m "Type any message"
+	git push -u origin master
+
+Incase of any error, type the following:
+	git config --global user.email "ksrkoushik@gmail.com"
+	
+Suppose we you are using git from different PC's, then follow these steps:
+	git status
+	git pull
+	git config --global user.email "ksrkoushik@gmail.com"
+	git add .
+	git commit -m "Any message"
+	git push -u origin master
+	
+That's it

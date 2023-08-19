@@ -1,0 +1,47 @@
+Building the root file system
+Go to Downloads/riscv/
+	wget https://busybox.net/downloads/busybox-1.33.0.tar.bz2
+	tar xf busybox-1.33.0.tar.bz2
+	cd busybox-1.33.0/
+	make allnoconfig
+	make menuconfig
+To configure busybox, please follow this link: https://aciinema.org/a/384727
+	make -j8
+After configuring busybox, type the following:
+	ls -la busybox
+	make install
+	tree _install/
+	sudo mkdir /mnt/rootfs
+	sudo mount /dev/loop18p2 /mnt/rootfs
+	sudo rsync -aH _install/ /mnt/rootfs/
+	sudo umount /mnt/rootfs
+	sudo mount /dev/loop18p2 /mnt/rootfs/
+	sudo mkdir /mnt/rootfs/dev
+	sudo mkdir /mnt/rootfs/proc
+	sudo mkdir /mnt/rootfs/sys
+	sudo umount /mnt/rootfs
+Go to Downloads/riscv folder
+run
+	./run-qemu
+after booting is done, press enter, then you can see the busybox terminal
+then type
+	ls -la
+	mount -t proc none /proc
+	mount -t sysfs none /sys
+Instead of manually mounting proc and sysfs, we will do the following:
+after running ./run-qemu stop the auto boot by pressing any key
+Then type the folowing:
+	editenv bootargs
+We will get the follwing screen 
+edit: root/dev/vda2 rootwait console=ttyS0 earlycon=sbi
+At the end of the above screen just add rw
+Then type
+	saveenv
+	boot
+After booting into busybox, type the following:
+	mkdir /etc
+	vi /etc/inittab
+	mkdir /etc/init.d
+	vi /etc/init.d/rcS
+	chmod +x /etc/init.d/rcS
+	
