@@ -1,0 +1,89 @@
+For Booting the Linux Kernel directly:
+	cd opensbi
+	make PLATFORM=generic FW_PAYLOAD_PATH=../linux-5.10.61/arch/x86/boot/bzImage
+	cd ..
+Inside run-qemu file enter the following:
+
+	qemu-system-riscv64 -m 2G \
+	-nographic \
+	-machine virt \
+	-smp 8 \
+	-bios opensbi/build/platform/generic/firmware/fw_payload.elf \
+	-append "console=ttyS0" \
+	
+The Actual booting process looks like:
+OpenSBI -> U-Boot -> Linux -> Userspace
+
+We want to show how to set the U-Boot env to load the Linux kernel and to specify the Linux kernel command line.
+For this purpose, we will need some storage space to store the U-Boot env, load the kernel binary, and also to contain the file system that Linux will boot on.
+So, Now let's create a disk image to give some storage space for QEMU.
+
+Lets create a 128MB disk image:
+	dd if=/dev/zero of=disk.img bs=1M count=128
+Lets create two partitions in this image:
+	cfdisk disk.img
+A first 64 MB primary partition(type W95 FAT32 (LBA)), marked as bootable.
+A second partition with remaining space (default type: Linux).
+check with
+	fdisk -lu disk.img
+Lets access the partitions in the disk image:
+	sudo losetup -f --show --partscan disk.img
+	/dev/loop18
+	ls -la /dev/loop18*
+	
+We can now format the partitions:
+	sudo mkfs.vfat -F 32 -n boot /dev/loop18p1
+	sudo mkfs.ext4 -L rootfs /dev/loop18p2
+	
+As we already have the Kernel image, lets copy it to file partition
+
+	sudo mkdir /mnt/boot
+	sudo mount /dev/loop18p1 /mnt/boot/
+This is for x86
+	sudo cp linux-5.10.61/arch/x86/boot/bzImage /mnt/boot/
+This is for riscv
+	sudo cp linux-5.10.61/arch/riscv/boot/Image /mnt/boot/
+	sudo umount /mnt/boot
+Next we want to recompile U-boot to use the environment in a FAT partition on a vitio disk
+	make menuconfig
+The following lines should be entered in .config file
+		CONFIG_ENV_IS_IN_FAT=y
+		CONFIG_ENV_FAT_INTERFACE="virtio"
+		CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
+Then recompile U-boot
+	make -j8
+Then update the firmware loader
+	cd ../opensbi
+	make PLATFORM=generic FW_PAYLOAD_PATH=../u-boot-2023.07.01/u-boot.bin
+Then Add a disk to the emulated machine:
+	qemu-system-riscv64 -m 2G -nographic -machine virt -smp 8 \
+	-bios opensbi/build/platform/generic/firmware/fw_payload.elf \
+	-drive file=disk.img,format=raw,id=hd0 \
+	-device virtio-blk-device,drive=hd0 \
+Then in U-boot you should now be able to save an environment
+	saveenv
+	
+Go to riscv/
+	./run-qemu
+	you will get OpenSBI screen
+	then type the following
+	setenv foo bar
+	
+Close and re-run ./run-qemu
+type the following:
+	printenv foo
+	fatls virtio 0:1
+then you can see the new u-boot with env in a FAT partition
+
+Next We will start Booting Linux from U-Boot:
+Run ./run-qemu
+Type the following:
+	setenv bootargs 'root=/dev/vda2 rootwait console=ttyS0 earlycon=sbi'
+This is for x86
+	setenv bootcmd 'fatload virtio 0:1 84000000 bzImage; booti 0x84000000 - ${fdtcontroladdr}'
+This is for riscv
+	setenv bootcmd 'fatload virtio 0:1 84000000 Image; booti 0x84000000 - ${fdtcontroladdr}'
+	
+
+
+	

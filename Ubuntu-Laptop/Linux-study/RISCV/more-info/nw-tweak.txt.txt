@@ -1,0 +1,40 @@
+STEPS TO FOLLOW:
+
+1) On HOST Machine:
+	ifconfig -a
+	sudo ifconfig tap2 192.168.1.2
+
+2) On Client Machine (Busybox):
+	ifconfig -a
+	ifconfig eth0 192.168.1.200
+
+3) On Host Machine:
+	sudo apt install nmap
+	sudo apt install traceroute
+	route -n (displays the kernel IP routing table)
+	traceroute <ip address/url>
+	traceroute -m3 <ip addr> (restricting to 3 hops)
+	
+	nmap <ip addr> (Basic Network Discovery)
+	nmap <ip addr/24> (Performing Port Scan which will give all the open n/w services)
+	nmap -p 80,443 192.168.1.200  (Port Scan giving details only of specific ports)
+	nmap -sV 192.168.1.200 (Service and Verison Detection)
+	sudo nmap -O -sV 192.168.1.200 (OS Finger printing along with Service and version Detection)
+	sudo nmap -O www.google.com
+	sudo nmap -O 192.168.208.2 (will give the detials of port, OS type, MAC address of target device)
+	sudo nmap -oN scan_results.txt 192.168.1.200
+	sudo nmap -O -oN scan_results.txt 192.168.208.2
+	
+Miscellenous:
+/proc:
+cat version
+cat partitions
+cat mounts
+cat meminfo
+echo "meta http-equiv=\"refresh\" content=\"1\">"
+	
+
+	
+	
+	
+	

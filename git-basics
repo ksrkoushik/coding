@@ -1,3 +1,4 @@
+
 git fundamentals:
 	git init
 	git remote add origin <URL-PATH>
@@ -18,3 +19,17 @@ Suppose we you are using git from different PC's, then follow these steps:
 	git push -u origin master
 	
 That's it
+
+For Test Procedure Updates, git steps:
+
+1) Create a new branch in Bit Bucket
+2) Go to mobaxterm and open cccr-3000/test_suites/
+3) git branch
+4) git fetch
+5) git checkout <new-branch>
+6) git pull
+   Then do the necessary to your desired script
+7) git add .
+8) git commit -m "message"
+9) git push
+	Wait for the completion of review and then merge to the master branch.
