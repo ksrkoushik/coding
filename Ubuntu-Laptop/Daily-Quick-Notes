@@ -1,0 +1,104 @@
+
+Date: 16/09/2023 (SAT)
+
+STEPS TO LOGIN TO START WITH BEAGLEBONE BLACK:
+
+	> Once the image is created on SD card, boot the image by inserting it into SD Card slot and then press and hold S2 button
+	for 2 to 5 seconds and then press S3 button on the board.
+	> Then install putty on ubuntu
+	> Configure the Putty by typing 192.168.7.2 on Host name
+	> Save and Load the settings
+	> Open the Terminal
+		Type: ssh debian@192.168.7.2
+		Enter password: temppwd
+		Type: su -
+		Enter password: root
+		Then you will be logged in as root user into beaglebone black
+		Type: uname -a
+		It will show the Beaglebone Black Linux verison
+		Type: cat /etc/dogtag
+		It will show the Beaglebone Black image verison
+	
+			
+SHARING UBUNTU PC INTERNET WITH BEAGLEBONE BLACK
+	> On Ubuntu PC, open Terminal 
+		Type: ufw status
+		It will show status as inactive
+		Type: Login as root
+		Type: vi /etc/sysctl.conf
+		Add the folloing lines under net.ipv4.ip_forward=1
+		net.ipv4.conf.all.forwarding = 1
+		net.ipv4.conf.default.forwarding = 1
+		net.ipv4.conf.<Type here Beaglebone Black Device ETH1 Name>.forwarding = 1
+		net.ipv4.conf.<Type here Beaglebone Black Device ETH2 Name>.forwarding = 1
+		net.ipv4.conf.lo.forwarding = 1
+		net.ipv4.conf.<Type here Ubuntu PC Wifi Device Name>.forwarding = 1
+	
+		Make sure that you uncomment the following lines in /etc/sysctl.conf file
+		net.ipv4.ip_forward=1
+		net.ipv6.conf.all.forwarding=1
+
+                Check the Interfaces by typing the following
+                Type: ifconfig
+                
+                Type: ufw status
+                
+                Next Flush the old rules from IP Tables
+                sudo iptables -t nat -F
+                sudo iptables -t mangle -F
+                sudo iptables -F
+		sudo iptables -X
+		
+		Then Type the following:
+		iptables --table nat --append POSTROUTING --out-interface wlxe0b94db737c9 -j MASQUERADE
+		iptables --append FORWARD --in-interface enx1cba8c9bbeb5 -j ACCEPT
+		Make sure wlxe0b94db737c9 matches the interface for WiFi interface on the laptop (which is connected to the Internet)
+		Make sure enx1cba8c9bbeb5 matches the interface for the USB "Ethernet" interface.
+		
+		Type: iptables -nL
+		This will chekc the firewall rules in iptables.
+		
+	>Now open new terminal and login into Beagleboneblack using ssh session
+	Type: putty
+	Putty opens up, enter the hostname as 192.168.7.2, save and load
+	
+	Type: ssh debian@192.168.7.2
+	Enter password as temppwd
+	
+	Type: ifconfig
+	This will check the interfaces on the BBB
+	
+	Type: sudo route add default gw 192.168.7.1
+	This will add route so that BBB tries to connect to the internet through the laptop
+	
+	Type: netstat -rn
+	This verifies the routes
+	
+	Type: ping 8.8.8.8
+	This ping will respond from the internet connection
+	
+	Type: vi /etc/resolv.conf
+	This opens up the file resolv.conf, then add the following line into the file
+	nameserver 8.8.8.8
+	Then Save the file and exit vi editor
+	
+	Type: ping www.google.com
+	Finally you will see a successful ping reply from the google server.
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
