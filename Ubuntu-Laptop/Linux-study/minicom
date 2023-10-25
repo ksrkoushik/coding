@@ -1,0 +1,6 @@
+sudo apt-get install minicom
+
+sudo demsg | grep tty
+
+then select the tty device and configure using
+sudo minicom -s

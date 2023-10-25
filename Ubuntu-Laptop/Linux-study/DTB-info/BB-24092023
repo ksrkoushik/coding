@@ -1,0 +1,87 @@
+BeagleBone Learning 24092023(SUN):
+
+> Why Device Tree is introduced? and What problem does it solve?
+	Linux Device Tree is also called as Flattened Device Tree
+	
+	PROBLEM:
+	
+	On any customized embedded board (ex: Beaglebone), there are various on-board peripherals
+	such as SPI0(Serial flash), GPIOB(LEDs), SDIO(SD-Card connector), EEPROM(I2C2), UART, ETHERNET and USB controller etc.
+	The problem is that the On-board(platform) peripherals are not dynamically discoverable and they have no capability to 
+	announce their existence on the board by themselves to the Operating System.
+	So The Operating System have no idea about the existence of these On-board peripherals or Platform devices.
+	But the only exception is that the USB device has the inbuilt intelligence to send its details to the Operating System,
+	which means USB supports dynamic discoverability).
+	
+	> Now the question is How can we make Linux Kernel know about these On-board peripherals or platform devices?
+		
+		Static Method:
+		One solution is by hardcoding these platform devices in a file called board-config.c which in turn consists of
+		a board_init function which manually adds all the platform devices to the linux subsystem along with the corresponding 
+		platform data.
+			For example,
+			static void board_init(void)
+			{
+				/* Serial */
+				board_add_device_serial(&serial_data); //serial_data is just a data-structure describing peripheral.	
+				:
+				:
+				:
+				And so on
+			}
+		The board-config.c file is actually a part of the linux kernel.
+		So when we modify the board-config.c file with a new device entry, we need to re-compile the kernel
+		for the changes to reflect.
+		
+		Ther will be corresponding drivers to handle the peripheral devices, ex: sdcard001.ko
+		When a driver for a particular platform peripheral is loaded, the linux calls the "probe" function of the driver
+		and if there is any match in its platform device database, then the device initialization can be done.
+	        
+	        But it is important to note that the corresponding driver-name (Kernel-Space) should be same as the platform 
+	        device-name (User-Space).
+	        	For example,
+	        	Probe_sdcard001_driver(void *data)
+	        	{
+	        		//initialize the device
+	        	}
+	        	
+	> But Now the Problem is different boards will have different On-board peripherals and each board have its own board file.
+	  That means for each board we have a different kernel image and this is the problem that still exists even with the statis method.
+	 
+	SOLUTION:
+	
+	> So To overcome the dependencies of platform device enumeration from the linux kernel (by using hardcoding using static method),
+	  Hence a new method has been discovered which is called Device Tree or Flattened Device Tree.
+	  
+	> Instead of Hard-coding the hardware details into the linux kernel board file, every board vendor has to come up with 
+	  a new file called DTS (Device Tree Source).
+	  This DTS file consists of all the details related to the board written using some pre-defined syntaxes.
+	  That means this DTS file consists of data structures which describe all the required periphgerals of the board.
+	 
+	> So Every board will have a DTS file and it will be comipled using a Device Tree compiler(DTC) to generate a 
+	  Device Tree Binary (DTB).
+	   				DTS ------------------> DTC --------------------> DTB
+	                        (Device Tree Source)    (Device Tree Compiler)     (Device Tree Binary)
+	
+	> Now we have one DTB file for every board, this makes our job easy because now whenever we edit the DTS file
+	  by adding a new entry, there is no need to compile the kernel again.
+	  We just need to comiple the DTS to obtain the new DTB. 
+	  
+	> Finally when we load the Kernel, the Kernel must know where the DTB file is present.
+	  During booting, the linux must know the address at which the DTB is present in the RAM (Load Address of DTB in RAM).      
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        	
+		
+		

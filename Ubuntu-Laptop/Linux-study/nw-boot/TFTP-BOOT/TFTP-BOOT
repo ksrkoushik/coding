@@ -1,0 +1,96 @@
+
+TFTP-BOOT Procedure:
+
+	Required Setup:
+	> Power the board using either connecting to PC using USB cable or using DC Adapter.
+	> Connect Ethernet port of the BBB Hardware to PC's Ethernet port using Ethernet cable.
+	> Also keep your SD card reday.
+	
+	> TFTP stands for Trivial File Transfer Protocol which can be used to transfer files between a TFTP server and a TFTP Client.
+	
+	Linux Host PC(Acts as TFTP Server with IP: 192.168.7.1) <----------------------------> BBB(TFTP Client with IP:192.168.7.2)
+		>Location on Host PC: /var/lib/tftpboot                   Over ETH Cable
+		am335x-boneblack.dtb                                                           First we boot the board using SD card
+ 		uImage                                                                         with these images (SPL, u-boot.img, 
+ 		                                                                               uEnv.txt upto U-boot)
+		Initramfs
+		We transfer these images using TFTP from
+		Host to BBB over Ethernet
+		
+	> TFTP commands are useful in fetching all the required images stored on TFTP server (Host PC) and place them on the board.
+	> To Automate all the TFTP commands, we use a uEnv.txt file with all the required commands for the TFTP boot process.
+
+	> STEPS:
+		1) We will keep the primary boot images like SPL, uboot and uEnv.txt on the SD card.
+		2) We will keep other boot images like linux Kernel image, dtb and the initramfs on the linux host pc 
+		   at the location: /var/lib/tftpboot.
+		3) After that we first boot the board using SD card upto uboot.
+		4) Then uboot reads the uEnv.txt file and executes the TFTP commands to fetch and place various boot images
+		   from TFTP server on to the DDR memory.
+		5) Then we will ask uboot to boot from the location where it placed the linux kernel image on the DDR memory.
+
+Preparing TFTP host
+
+	Setting up a TFTP server on Ubuntu host
+	Step 1:  First on your Ubuntu host run the below command using your terminal program.
+
+	This command installs the tftpd , xinetd(eXtended InterNET Daemon) . tftpd is a server for the Trivial File Transfer Protocol.
+
+	$ sudo apt-get install xinetd tftp tftpd
+
+	Step 2 : Create/Open the file “tftp” in the below directory
+
+	$ sudo vi /etc/xinetd.d/tftp    and put the below entry in to this file  and save it
+
+	service tftp
+	{
+	protocol = udp
+	port = 69
+	socket_type = dgram
+	wait = yes
+	user = nobody
+	server = /usr/sbin/in.tftpd
+	server_args = /var/lib/tftpboot -s
+	disable = no
+	}	
+
+	Step3 :
+
+	Create a folder /var/lib/tftpboot and execute below commands
+
+	$sudo mkdir /var/lib/tftpboot
+
+	$sudo chmod -R 777 /var/lib/tftpboot
+
+	$sudo chown -R nobody /var/lib/tftpboot
+
+	Step 4: Restart the xinetd service. Now the xinetd daemon is running.
+
+	$ sudo /etc/init.d/xinetd restart
+
+
+
+To Configure the IP for Host:
+	ifconfig eth0 192.168.27.1
+
+On BBB
+	setenv serverip 192.168.27.1
+	setenv ipaddr 192.168.27.2
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
