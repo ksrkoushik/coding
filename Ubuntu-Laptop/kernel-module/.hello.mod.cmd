@@ -1,0 +1,1 @@
+cmd_/home/srikanth/Downloads/kernel-module/hello.mod := printf '%s\n'   hello.o | awk '!x[$$0]++ { print("/home/srikanth/Downloads/kernel-module/"$$0) }' > /home/srikanth/Downloads/kernel-module/hello.mod

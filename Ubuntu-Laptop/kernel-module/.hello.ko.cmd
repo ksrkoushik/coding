@@ -1,0 +1,1 @@
+cmd_/home/srikanth/Downloads/kernel-module/hello.ko := /home/srikanth/Downloads/kernel-module/buildroot/output/host/bin/arm-none-linux-gnueabihf-ld -r -EL -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/srikanth/Downloads/kernel-module/hello.ko /home/srikanth/Downloads/kernel-module/hello.o /home/srikanth/Downloads/kernel-module/hello.mod.o;  true
