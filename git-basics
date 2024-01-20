@@ -11,12 +11,24 @@ Incase of any error, type the following:
 	git config --global user.email "ksrkoushik@gmail.com"
 	
 Suppose we you are using git from different PC's, then follow these steps:
-	git status
-	git pull
-	git config --global user.email "ksrkoushik@gmail.com"
-	git add .
-	git commit -m "Any message"
-	git push -u origin master
+	Generate SSH Key:
+		ssh-keygen -t ed25519 -C "your_email@example.com"
+	When prompted something as shown below, press enter:
+		Enter a file in which to save the key (/home/YOU/.ssh/id_ALGORITHM):[Press enter]
+	Start SSH in the background by entering the below command:
+		eval "$(ssh-agent -s)"
+	Copy the text after entering the below command:
+		cat ~/.ssh/id_ed25519.pub
+	Paste the copied text to your git account inside settings by clicking on Add SSH Key or New SSH Key
+	First convert remote's URL from HTTPS to SSH with the git remote set-url command.
+		git remote -v
+		git remote set-url origin git@github.com:ksrkoushik/coding.git
+		git status
+		git pull
+		git config --global user.email "ksrkoushik@gmail.com"
+		git add .
+		git commit -m "Any message"
+		git push -u origin master
 	
 That's it
 
