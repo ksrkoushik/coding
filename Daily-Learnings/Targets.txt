@@ -1,0 +1,18 @@
+1) Secure Software Concepts:
+	> Application Security
+	> CIA (Confidentiality-Integrity-Availability)
+	> Access Controls
+	> Authentication, Authorization, Accountability and Nonrepudiation)
+
+2) Threat Modelling:	
+	> Potential Threats
+	> STRIDE
+
+3) Secure SW Testing:
+	> Fuzzing, Vulnerability Scanner, Penetration Testing
+	> Cryptography
+
+4) Networking Concepts
+
+5) Coding: C, C++ and Python
+

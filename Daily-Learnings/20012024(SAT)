@@ -1,0 +1,87 @@
+20012024(SAT): 
+Youtube CyberSecurity Full Course-Edureka
+	1) Types of Attacks:
+		> Website Defacement
+		> Buffer Overflow
+		> Denial of Service
+		> Distributed Denial of Service (DDOS)
+
+	2) Penetration Testing:
+		> Vulnerability Assessment
+		> Create a detailed test report and suggest fixes to the bugs
+		> Fixing the Vulnerabilites
+		> Security Assessment
+
+	3) Foot Printing: Gathering information of Target systems
+		> Port Scans, Filters etc
+		> Some tools: archive.org (Wayback machine), Netcraft
+
+	4) Using DNS to get more information:
+		> Internet registries (arin.net)
+		> use of commands: whois <domain-name or IP>
+						   dig <domain-name or IP>
+		> DNS: Names to IP Addresses
+
+	5) Finding Network Ranges:
+		> host netflix.com
+			this will return the IP address
+		> dig -mx netflix.com
+
+	6) Using Google for Reconnaissance (Google Hacking):
+		> Using Google to target the things that you are looking for is a useful skill as an ethical hacker.
+		> https://www.exploit-db.com/google-hacking-database
+
+	7) NW Basics:
+		> DARPA (Defence Advanced Research Project Agency)
+		> IPv4 - 32 bit, IPv6: 128 bit
+		> OSI and TCP/IP Model
+		> UDP
+		> Wireshark
+		> Addressing Modes:
+			> Unicast
+			> Broadcast
+			> Multicast
+		> DHCP
+		> ARP
+
+	8) Cryptography:
+		> Cipher-text (Encryption and Decryption)
+		> DES (56 bits key size and block size of 64 bits) -> AES ( 3 different key sizes: 128/192/256 bits and block size of 128 bits)
+		> Types of Cryptography: 
+			Symmetric (Same keys) and Asymmetric (Different keys-Private and Public keys)
+		> Symmetric:
+			aescrypt -e -p god test.txt
+			aescrypt -d -p god test.txt.aes
+
+		> Asymmetric:
+			Create file test.txt with some text in it.
+			Generate a private key:
+				openssl genrsa -des3 -out private.key 4096
+			Generate a public key: 
+				openssl rsa -in private.key -pubout -out public.key
+			Encrypt the test.txt file using public.key:
+				openssl rsautl -encrypt -pubin -inkey public.key -in test.txt -out encry-test.txt
+											OR
+				openssl pkeyutl -encrypt -pubin -inkey public.key -in test.txt -out encry-test.txt
+			Decrypt the file using private.key:
+				openssl pkeyutl -decrypt -inkey private.key -in encry-test.txt -out decry-test.txt 
+
+	9) Certificates:
+		> Create a Digital certificate
+			> first create a private key:
+				openssl genrsa -des3 -out -ca.key 4096
+			> generating certificate:
+				openssl req -new -x509 -days 365 -key -ca.key -out test.crt
+			> viewing the certificate:
+				openssl x509 -text -in test.crt
+
+	10) Crytographic Hashing:
+			> Examples of Hashing algorithms: md5, sha1
+				md5sum test.crt
+
+
+
+
+
+
+
