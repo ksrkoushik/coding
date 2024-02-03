@@ -13,7 +13,11 @@ int main()
 	y1 = sqrt(a);
 	y2 = sqrt(b);
 	y3 = sqrt(c);
+<<<<<<< HEAD
 	y4 = d/y3;
+=======
+	y4 = d/y2;
+>>>>>>> baac92026e6eee88de62317b1d2bd8892953ed39
 	cout << y1 <<"\n";
 	cout << y2 <<"\n";
 	cout << y3 <<"\n";
