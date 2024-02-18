@@ -1,0 +1,13 @@
+IP-TABLES: sudo su -
+	>This command stops the ping icmp traffic:
+		sudo iptables -t filter -A INPUT -p icmp -j DROP
+	> This command allows/accepts the ping icmp traffic
+		sudo iptables -t filter -I INPUT 1 -p icmp -j ACCEPT
+	> This command stops the outgoing traffic to netfilter.org
+		sudo iptables -t filter -A OUTPUT -d netfilter.org -j DROP
+	> Net-Filter Chains:
+		> INPUT
+		> OUTPUT
+		> FORWARD
+		> PREROUTING
+		> POSTROUTING
