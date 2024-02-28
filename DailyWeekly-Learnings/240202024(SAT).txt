@@ -1,0 +1,3 @@
+24022024(SAT):
+	> Created a Console Calculator APP using Visual Studio C++.
+	> Understanding MFC: Source files, Resource files and Header files.

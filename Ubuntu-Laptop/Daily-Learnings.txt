@@ -1,0 +1,94 @@
+Linux-Security (220102024):
+	> IP-TABLES:
+		> NETFILTER CHAINS:
+			> INPUT : for incoming pkts
+			> OUTPUT: for outgoing pkts
+			> FORWARD: for filtering routed pkts
+			> PREROUTING: for DNAT/Port forwarding
+			> POSTROUTING: for SNAT (Masquerade)
+			
+		> commands:
+			>iptables -t filter -A INPUT -p icmp -j DROP
+			>iptables -t filter -A OUTPUT -d netfilter.org -j DROP
+		
+		> Netfilter Tables:
+			>filter : INPUT, OUTPUT and FORWARD Built-in-chains
+			>nat: PREROUTING, POSTROUTING and OUTPUT Built-in-chains.
+			>mangle: for packet alteration: PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING.
+			>raw: It is only used to set a mark on packets that should not be handled by the connection tracking system. Using NOTRACK target on the packet.
+		
+		> iptables -A INPUT -p tcp --dport 22 -s 5.3.6.6 -j ACCEPT
+		> iptables -A INPUT -p tcp --dport 22 -j DROP
+		
+		> CHAIN TRAVERSAL:
+			> Incoming traffic is filtered on the INPUT CHAIN of the filter table.
+			> Outgoing traffic is filtered on the OUTPUT CHAIN of the filter table.
+			> Routed traffic is filtered on the FORWARD CHAIN of the filter table.
+			> SNAT/MASQUERADE is performed on the POSTROUTING CHAIN of the nat table.
+			> DNAT/Port Forwarding is performed on the PREROUTING CHAIN of the nat table.
+			> To modify values from the packet's headers, add rules to the mangle table.
+			> To Skip the connection tracking, add rules with NOTRACK target to the raw table.
+			
+		> IP-TABLES Commands Understanding:
+			iptables -t filter -A INPUT -p icmp -j DROP
+			iptables -A INPUT -p tcp --dport 22 -j DROP
+			iptables<-t table_name> -A INPUT -p tcp --dport 22 -s 5.3.6.6 -j ACCEPT
+			              (1)       (2)  (3)         (4)                  (5)    
+
+			(1) table names:
+				filter(default)
+				nat
+				mangle
+				raw
+				
+			(2) commands:
+				-A append
+				-I insert
+				-D delete
+				-R replace
+				-F flush
+				-Z zero
+				-L list
+				-S show
+				-N
+				-X
+			
+			3) CHAIN type:
+				INPUT
+				OUTPUT
+				FORWARD
+				PREROUTING
+				POSTROUTING
+				USER_DEFINED
+			
+			4) Matches:
+				-s source_ip
+				-d dest_ip
+				-p protocol
+				--sport source_p
+				--dport dest_p
+				-i incoming_int
+				-o outgoing_int
+				-m mac
+				-m time
+				-m quota
+				-m limit
+				-m recent
+				
+			5) Target/Jump:
+				ACCEPT
+				DROP
+				REJECT
+				LOG
+				SNAT
+				DNAT
+				MASQUERADE
+				LIMIT
+				RETURN
+				TEE
+				TOS
+				TTL
+		
+		> Remember that only root users can use IP Tables command.
+		> IP Tables are in user space and Net-Filter tables are in Kernel space.
+		
