@@ -1,9 +1,0 @@
-If base price is 4300000
-reg fee: 43000
-stamp duty: 215000
-Legal-documentation charges: 30000
-GST: 215000
-Bank Loan Processing fee: 43000
-Parking : 400000
-Other Charges: 500000
-Total: 
