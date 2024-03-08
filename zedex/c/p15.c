@@ -2,18 +2,18 @@
 
 int main(int argc, char *argv[])
 {
-	//create two arrays
+	//create some arrays
 	int ages[] = {23, 35, 46, 89, 4};
 	char *names[] = {"Sri", "Venky", "Ravi", "Tom", "Jerry"};
-
+	char *sports[] = {"Cricket", "Volleyball", "Football", "Hockey", "Chess"};
 	//safely get the size of ages
 	int count = sizeof(ages) / sizeof(int);
 	int i = 0;
-
 	// first way of using indexing
-	for (i = 0; i < count; i++)
+	for (i = 0 ; i < count; i++)
 	{
-		printf("%s has %d years alive. \n", names[i], ages[i]);
+		printf("%s is %d years old and loves to play %s \n", names[i], ages[i], sports[i]);
+
 	}
 	
 	printf ("---\n");
