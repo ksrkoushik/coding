@@ -1,0 +1,29 @@
+ HDD
+ Mainmemory (RAM)
+ 
+ 1 byte = 8 bits
+ 
+ char = 1 byte
+ short int = 2 bytes
+ long int = 4 bytes
+ long long int = 8 bytes
+ 
+ 1 byte unsigned int range =  0 to 255
+ 	> 0 = 00000000
+ 	> 255 = 11111111
+ 	
+ 1 byte signed int range = -128 to +127
+ 	> -128 = 10000000
+ 	> 255 = 11111111
+ 	> 0 = 00000000
+ 	> +127 = 01111111
+ 
+ 4 byte unsigned int range = 0 to 4294967295
+ 4 byte signed int range = -2147483648 to +2147483647
+ 
+ int8_t, int16_t, int32_t, int64_t
+ 
+ uint8_t, uint16_t, uint32_t, uint64_t
+ 
+ 
+ 
