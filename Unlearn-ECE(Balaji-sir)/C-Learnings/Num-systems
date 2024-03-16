@@ -1,0 +1,26 @@
+For Doubts/queries
+ecenelectronics@gmail.com
+
+Number Systems:
+	Decimal (0 to 9) -> for humans
+	Binary (0 , 1)-> for computers/electronics
+	Hexa-Decimal (0 to 15) -> Another form of Binary
+	Symbol -> ASCII
+	
+	0               00          000            0000			00000001 = 1
+	1               01	    001            0001			00000010 = 2
+			10          010            0010			00000100 = 4
+			11          011            0011			00001000 = 8
+				    100            0100			00010000 = 16
+				    101            0101			00100000 = 32
+				    110            0110			01000000 = 64
+				    111            0111			10000000 = 128
+					           1000
+					           1001
+					           1010 A
+					           1011 B
+					           1100 C
+					           1101 D
+					           1110 E
+					           1111 F
+

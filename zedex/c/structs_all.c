@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	//Method-II
 	struct Veh Vehicle1;
 	strncpy(Vehicle1.name, "Hyundai", sizeof(Vehicle1.name) - 1);
-	Vehicle1.name[sizeof(Vehicle1.name) - 1] = '\0';
+	Vehicle1.name[sizeof(Vehicle1.name) + 1] = '\0';
 	Vehicle1.cost = 700000;
 	printf("Vehicle name: %s\n", Vehicle1.name);
 	printf("Vehicle cost: %d\n", Vehicle1.cost);
