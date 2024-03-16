@@ -1,5 +1,5 @@
-For Doubts/queries
-ecenelectronics@gmail.com
+>For Doubts/queries
+ ecenelectronics@gmail.com
 
 Number Systems:
 	Decimal (0 to 9) -> for humans
@@ -23,4 +23,21 @@ Number Systems:
 					           1101 D
 					           1110 E
 					           1111 F
+
+
+> 128 64 32 16 8 4 2 1
+   0   0  0  0 0 0 0 0 = 0
+   1   1  1  1 1 1 1 1 = 255
+   
+>                  65536         32768        16384       8192     4096    2048   1024   512   256   128   64   32   16  8  4  2   1
+		     64K	 32K		16K	   8K        4K     2K	   1K
+
+> 2^10 = 1K
+> 2^20 = 1M
+> 2^30 = 1G
+> 2^40 = 1T
+> 2^50 = 1peta
+
+
+
 
