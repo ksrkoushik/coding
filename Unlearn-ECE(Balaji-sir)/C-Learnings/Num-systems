@@ -39,5 +39,95 @@ Number Systems:
 > 2^50 = 1peta
 
 
+> Binary-Operations:
+	Binary Additions: 1-bit addition, 2-bit addition, 3-bit addition, 4-bit addition
+	Concept of Carry-In (Cin) and Carry-Out (Cout)
+	         c    s
+	0 + 0 =  0    0
+	0 + 1 =  0    1
+	1 + 0 =  0    1
+	1 + 1 =  1    0
+
+		c   s                       
+	0 0     0   0                
+	0 1     0   1		      
+	1 0     0   1
+	1 1     1   0
+	
+Arithmetic and Logical Functions: ALU(Arithmetic Logic Unit)
+
+Addition: Inputs: A, B       Outputs: C, S
+Subtraction: Inputs:A, B     Outputs: B, D
+Multiplication: Inputs:A, B  Outputs:L, H
+Division: Inputs:A, B        Outsputs: Q, R
+
+AND   A.B
+OR    A+B
+NOT   !A
+
+
+ 1000    100    10     1   >> Decimal
+  8       4     2      1   >> Binary
+ 4096    256    16     1   >> Hexa-Decimal
+
+
+00000000 >> 00  >> 00
+00111111 >> 63  >> 3F
+
+01000000 >> 64  >> 40
+01111111 >> 127 >> 7F
+
+10000000 >> 128 >> 80
+10111111 >> 191 >> BF
+
+11000000 >> 192 >> C0
+11111111 >> 255 >> FF
+
+And Now finally lets understand the 8-bit combinations for addresses, This is very important for Microprocessor and Interface.
+
+          Mem-Map  Memory
+00000000 >>  00  >> 00 
+00011111 >>  31  >> 1F
+
+00100000 >>  32  >> 20
+00111111 >>  63  >> 3F
+
+01000000 >>  64  >> 40
+01011111 >>  95  >> 5F
+
+01100000 >>  96  >> 60
+01111111 >>  127 >> 7F
+
+10000000 >>  128 >> 80
+10011111 >>  159 >> 9F
+
+10100000 >>  160 >> A0
+10111111 >>  191 >> BF
+
+11000000 >>  192 >> C0
+11011111 >>  225 >> DF
+
+11100000 >>  226 >> E0
+11111111 >>  255 >> FF
+
+Logical Operations on Binary: AND, OR, NOT, EX-OR: Bit wise Operations
+	> AND is useful to Reset one bit.
+	> OR is useful to Set one bit
+	> NOT is useful to Negate.
+	> EX-OR is useful to Toggle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
