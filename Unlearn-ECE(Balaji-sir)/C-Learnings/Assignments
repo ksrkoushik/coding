@@ -1,0 +1,23 @@
+
+	starting with 1 to 9 >> Decimal
+	starting with 0 >> Octal
+	starting with x>> Hexa Decimal
+	starting with 'A' >> ASCII
+	starting with b >> Binary
+	
+	formatting specifiers: 
+		%d >> Decimal
+		%o >> Octal
+		%c >> ASCII
+		%x >> Hexadec
+		%b >> Binary
+
+	If a = -55, how it will be stored in the memory?
+	   55 >> 0110111
+	*** IMPORTANT ***   
+	   one sign bit, so >> 1 0110111
+	   1s complement of 0110111 >> 1001000
+	   2s compliment of 0110111 >> 1001000
+	                             +       1
+	                           >>  1001001
+	   Finally, it will be stored along with sign bit as >> 1 1001001
