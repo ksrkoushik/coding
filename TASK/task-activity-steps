@@ -1,0 +1,25 @@
+TASK ACTIVITY:
+
+	> sudo apt update
+	> sudo apt-get install ca-certificates
+	> sudo apt-get install curl
+	> sudo apt-get install gnupg
+	> sudo apt-get install isb-release
+	> sudo mkdir -p /etc/apt/keyrings
+	> curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+	> echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	
+	> sudo apt-get update
+	> sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+	> sudo service docker start
+	> sudo service docker status
+	*** Then you will see a Docker running status, so keep that terminal tab open and open another new terminal and enter the following commands ***
+	> sudo docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
+	
+	Then Install the Library amqp on another terminal, go to your project folder and run the following command:
+	> sudo apt install build-essential cmake libboost-all-dev libssl-dev
+	> sudo rabbitmq-plugins enable rabbitmq_management
+	
+	
+	
+	
