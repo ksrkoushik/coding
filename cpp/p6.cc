@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
-void pause();
+void pause()
+{
+	cout << "BREAK";
+}
 int main()
 {
 	cout << "Dear reader\n"
@@ -9,7 +12,4 @@ int main()
 	cout << "!\n";
 	return 0;
 }
-void pause()
-{
-	cout << "BREAK";
-}
+
