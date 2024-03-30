@@ -1,0 +1,26 @@
+
+	Problem: Create a FCUD/MVS service which shall create, update or delete files on the filesystem upon receiving the 
+	         corresponding valid request. 	
+	
+	
+	TASK-SUMMARY:
+	
+	> Installed Docker on to my VM (Ubuntu).
+	> Installed the Docker Container image for RabbitMQ-3.13-management.
+	> Invoked the rabbitmq container image using Docker.
+	> Opened the rabbitmq default page using http://localhost:15672 and entered username as guest and password as guest.
+	> Created two python scripts fcud.py (for file create/update/delete service) and mvs.py (for message validation service).
+	> When fcud.py script is executed, it will publish the message and the action can be 
+	  seen on the rabbitmq GUI queue page.
+	> The message will stay in the queue and as soon as the mvs.py script is executed,
+	  depending on the type of message, the validation of message takes place (Creation/Updation/Deletion).
+	  
+	Conclusion: I Could not execute the task using C++ because there is an AMQCPP library dependency and without the 
+		    AMQPCPP library we can cannot create any connection/channel. My observation is that there are some .so and .cpp files
+		    are missing when we install AMQPCPP library because of which the code is failing.
+	
+	Hence, I tried to replicate the same in Python and could successfully execute the Task.
+	
+	Thank you	    
+	Srikanth Kotakonda
+	

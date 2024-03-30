@@ -1,0 +1,46 @@
+EXECUTION STEPS:
+	1) Open VS Code and the task-python directory.
+	
+	2) Open the separate Ubuntu Terminal, Run the following command:
+		sudo docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
+		
+	2) Open three terminal tabs:
+		Tab-1: Be on location Downloads/coding/TASK/task-python/
+		Tab-2: Be on location Downloads/coding/TASK/task-python/
+		Tab-3: Navigate to /usr/applications/fcud/files/
+		
+	3) Open the browser and type the url: http://locahost:15672
+	   and create a queue named "letterbox" with classic type and durable.
+	   click on the queue and keep the page opened...
+	   
+	4) On Tab-1, Run the fcud.py
+	
+	5) On Tab-2, Run the mvs.py
+	
+	6) And see whether a new file is created at /usr/applications/fcud/files/
+	
+	7) if file is created, run the below command:
+		cat <file-name>
+		
+	8) sudo service docker stop
+		
+INPUT Messages:
+
+	1) <Message>
+   <Command>Create</Command>
+   <FileName>Xyz.txt</FileName>
+   <Content>Lorem Ipsum\n</Content>
+</Message>"""
+
+	2) <Message>
+   <Command>Update</Command>
+   <FileName>Xyz.txt</FileName>
+   <Content>How Are You? and Happy Diwali!!\n</Content>
+</Message>"""
+
+	3) <Message>
+   <Command>Delete</Command>
+   <FileName>Xyz.txt</FileName>
+   <Content>Lorem Ipsum\n</Content>
+</Message>"""
+
