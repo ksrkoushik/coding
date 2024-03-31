@@ -1,1 +1,18 @@
-	Operators
+	Operators: Total 22 operators
+	
+	Add(+)    Sub(-)    Mul(*)    Div-Q(/)    DIV-R(%)
+	
+	AND(&)     OR(|)    NOT(~)    EX-OR(^)
+	
+	&&          ||       !
+	
+	<    >      <=       >=     ==      !=
+	
+	++   --
+	post-inc: a++ means a=a+1, b=a++ means b=a=a+1 which does first b=a and then a = a+1
+	pre-inc: ++a means , for example b=++a which does first a=a+1 and then b=a
+	
+	<<   >>
+	
+	In C, All Non-zero are called TRUE and Zero is called FALSE
+	

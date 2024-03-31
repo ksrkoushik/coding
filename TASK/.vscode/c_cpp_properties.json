@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

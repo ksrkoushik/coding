@@ -1,0 +1,19 @@
+//Steps to install amqpcpp.h library
+
+	git clone https://github.com/CopernicaMarketingSoftware/AMQP-CPP.git
+	cd AMQP-CPP
+	mkdir build
+	cd build
+	make
+	make install
+	
+	for compiling a program:
+	g++ -g -Wall -lamqcpp -lpthread -ldl fcud.cc -o fcud
+	g++ -g -Wall -lamqcpp -lpthread -ldl mvs.cc -o mvs
+	
+	g++ -g -Wall fcud.cc -o fcud -L/path/to/amqpcpp/lib -lamqpcpp -lpthread -ldl
+	
+	g++ -g -Wall fcud.cc -o fcud -L/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include -lamqpcpp -lpthread -ldl
+	
+	g++ -g -Wall mvs.cc -o mvs -L/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include -lamqpcpp -lpthread -ldl
+	
