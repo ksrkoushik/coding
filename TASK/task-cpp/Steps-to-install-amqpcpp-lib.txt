@@ -17,3 +17,6 @@
 	
 	g++ -g -Wall mvs.cc -o mvs -L/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include -lamqpcpp -lpthread -ldl
 	
+	g++ -g -Wall fcud-test.cc -o fcud-test -L/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include -lamqpcpp -lpthread -ldl
+	
+	g++ -g -Wall mvs-test.cc -o mvs-test -L/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include -lamqpcpp -lpthread -ldl

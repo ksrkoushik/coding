@@ -1,4 +1,8 @@
 EXECUTION STEPS:
+	Pre-requisites: 
+		> Docker should be installed.
+		> Pika (RabbitMQ / AMQP 0-9-1) library must be installed.
+	
 	1) Open VS Code and the task-python directory.
 	
 	2) Open the separate Ubuntu Terminal, Run the following command:

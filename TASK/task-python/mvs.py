@@ -58,10 +58,10 @@ connection = pika.BlockingConnection(connection_parameters)
 channel = connection.channel()
 
 # Declare the queue
-channel.queue_declare('letterbox', durable=True)
+channel.queue_declare('fcud.input', durable=True)
 
 # Consume messages from the queue
-channel.basic_consume(queue='letterbox', auto_ack=True, on_message_callback=on_message_received)
+channel.basic_consume(queue='fcud.input', auto_ack=True, on_message_callback=on_message_received)
 
 print("Started consuming messages...")
 channel.start_consuming()

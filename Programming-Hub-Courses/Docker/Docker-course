@@ -1,0 +1,42 @@
+	All about Docker
+	
+	> Containers are software units that are standardized.
+	   They have the code and all the dependencies that makes it easier for the
+	   application to run from one environment to the other.
+	> Docker containers are isolated boxes which contain all ideal conditions
+	  for the application to be executed on any operating system.
+	> Docker keywords: BUILD, SHIP and RUN.
+	
+	> Docker Installation:
+		>> On Windows: https://docs.docker.com/docker-for-windows/install/
+		
+	> Docker commands:
+		docker --version
+		docker images
+		docker rmi <image-name or image-id>
+		docker exec
+		docker history
+		docker info
+		docker pull
+		
+	> Docker Container commands:
+		docker ps
+		docker create
+		docker attach
+		docker stop
+		docker kill
+		docker rename
+		docker update
+		
+	> Docker File is like a bule print of environment.
+		Docker File >>> Build >>> Docker Image >>> Run >>> Docker Container
+	> Docker images are blueprints of the containers.
+	> Docker image includes all the elements that are needed to run the app
+	  as a container, these include config files, env variables, libraries and run time.
+	  
+	> The run command creates a container from the given image
+	
+	
+	
+	
+	

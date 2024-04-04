@@ -1,0 +1,50 @@
+Go to the directory task-python where fcud.py and mvs.py scripts are available:
+
+	> pip install pyinstaller
+	> pyinstaller --onefile fcud.py
+	> pyinstaller --onefile mvs.py
+	After PyInstaller finishes, you will find the dist directory in the same location. Inside the dist directory, 
+	you will see the standalone executable files (fcud and mvs).
+	
+Containerize the generated fcud and mvs binaries:
+	> Create a file named Dockerfile.fcud with the following content:
+		# Use a base image suitable for running your binary (e.g., Alpine Linux)
+		FROM alpine:latest
+
+		# Copy your fcud binary into the container
+		COPY dist/fcud /usr/local/bin/fcud
+
+		# Set execute permission for the binary
+		RUN chmod +x /usr/local/bin/fcud
+
+		# Define the command to run when the container starts
+		CMD ["fcud"]
+		
+	> Create a file named Dockerfile.mvs with the following content:
+		
+		# Use a base image suitable for running your binary (e.g., Alpine Linux)
+		FROM alpine:latest
+
+		# Copy your mvs binary into the container
+		COPY dist/mvs /usr/local/bin/mvs
+
+		# Set execute permission for the binary
+		RUN chmod +x /usr/local/bin/mvs
+
+		# Define the command to run when the container starts
+		CMD ["mvs"]
+		
+	> Run the following commands to build Docker images for both fcud and mvs:
+		docker build -f Dockerfile.fcud -t fcud .
+		docker build -f Dockerfile.mvs -t mvs .
+		
+	> Once the Docker images are built, you can run Docker containers using these images:
+		docker run --name fcud-container fcud
+		docker run --name mvs-container mvs
+
+	
+	
+
+	
+
+
