@@ -1,0 +1,48 @@
+1) What is the purpose of class Car declaration in the code?
+	The class Car defines a blue print for creating car objects. It encapsulates properties(such as 'brand', 'model' and 'year')
+	and behaviours (such as displaying car information) related to a car.
+
+2) Explain the significance of 'private' and 'public' access specifiers in the class Car?
+	The private and public access specifiers in the class Car control the accessibility of class memebers.
+	private members are accessible only with in the class whereas the public members are accessible from outside the class.
+
+3) What are the data members of the Car class and what types are they??
+	The data members of the Car class are 'brand' and 'model' of type string and 'year' of type int.
+
+4) Describe the role of a constructor Car(string b, string m, int y)?
+	The constructor Car(string b, string m, int y) is used to initialize objects of the Car class with specific values
+	for the 'brand', 'model' and 'year' properties. It allows creating Car objects with specified attributes at the
+	time of creation.
+
+5) How can you access the brand, model, and year properties of a Car object?
+	To access the brand, model, and year properties of a Car object, you can use getter methods like getBrand() or 
+	directly access them if the access specifier permits. 
+	
+6) What is the purpose of the displayInfo() member function in the Car class?
+	The displayInfo() member function in the Car class is responsible for displaying information about the car, 
+	including its brand, model, and year.
+	
+7) Why is encapsulation important in object-oriented programming, and how does the Car class demonstrate encapsulation?
+	Encapsulation is important in object-oriented programming because it hides the internal implementation details of a 
+	class from the outside world, promoting data security and code maintainability. In the Car class, 
+	encapsulation is demonstrated by making the data members brand, model, and year private, 
+	thus preventing direct access from outside the class.
+	
+8) Discuss the advantages of using a constructor to initialize objects of a class?
+	Using a constructor to initialize objects of a class ensures that the object is properly initialized when it is created, 
+	reducing the chance of errors due to uninitialized variables. It also allows setting initial values for the object's properties.
+	
+9) Discuss the usage of the using namespace std; statement in the code. What are the alternatives, and why might you choose not to use it?
+	The using namespace std; statement simplifies code by allowing the use of standard library elements without explicitly 
+	specifying the std:: namespace prefix. Alternatives include explicitly prefixing standard library elements with std:: or 
+	using individual using statements for specific elements. Not using using namespace std; 
+	can prevent naming conflicts and make the code more readable and maintainable, especially in larger projects
+
+
+
+
+
+
+
+
+

@@ -1,8 +1,41 @@
 Control Statements:
 
-	IF-Statement:
+>>	IF-Statement:
 	
-	if (condition)
+	if(condition)
 	{
 		//statements
 	}
+	
+
+	
+	
+	if(condition)
+	{
+		//statements
+	}
+	else
+	{
+		//statements
+	}
+	
+	
+	if(condition1)
+	{
+		//statements
+	}
+	elif(condition2)
+	{
+		//statements
+	}
+	elif(condition3)
+	{
+		//statements
+	}
+	else
+	{
+		//statements
+	}
+	
+	
+	

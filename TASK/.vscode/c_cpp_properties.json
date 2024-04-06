@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/home/srikanth/Downloads/coding/TASK/task-cpp/AMQP-CPP/include",
+                "/home/srikanth/Downloads/coding/TASK/expt/rabbitmq-c/include",
                 "/usr/lib/x86_64-linux-gnu/",
                 "/usr/include/"
             ],
