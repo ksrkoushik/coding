@@ -1,0 +1,48 @@
+	> POINTERS
+	
+	Memory Location and Content
+	
+	Pointer and Variable
+	
+	Where and What
+	
+#include <stdio.h>
+
+int main()
+{
+  char *x;
+  x=(char *) 10000;
+  *x = 10;
+  printf("%d %d", *x, x);
+  return 0;
+}
+
+
+x >> content >> variable >> data
+Fixed-Ponter >> &x >> Location >> pointer >> Address
+
+Variable Pointer >> *y >> location >> pointer
+y >> variable >> data
+
+Program running on OS >> Software
+Program running on Microprocessor directly >> Firmware
+
+
+&x >> Fixed pointer >> Cannot change
+*x >> Variable pointer >> Can change
+a[10] >> Array pointer >> Cannot change
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+

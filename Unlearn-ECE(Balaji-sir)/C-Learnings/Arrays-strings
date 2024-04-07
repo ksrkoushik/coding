@@ -1,0 +1,54 @@
+	> ARRAYS and STRINGS:
+	
+		char a[5];
+		short int b[5];
+		long int c[5];
+		long long int d[5];
+		
+		Important notations:
+		int a;
+		a = 10; //decimal
+		a = 010; //octal
+		a = 0x10; //hexadecimal
+		a = 'A'; //symbol
+		a = -5; //negative
+		a = 0b11001110; //binary
+		
+		int main()
+		{
+  			char a[4];
+  			char a[4]={'E','C', 'E', 'N'};
+  			char a[4] = "ECEN";
+ 			a[0] = 'E';a[1]='C';a[2]='E';a[3]='N';
+  			printf("%c%c%c%c", a[0],a[1],a[2],a[3]);
+  			printf("%s\n", &a[0]);
+  			return 0;
+		}
+		
+		int main()
+		{
+  			char a[]="ECEN";
+  			printf("%c%c%c%c\n", a[0],a[1],a[2],a[3]);
+  			printf("%s", a);
+  			int i = 0;
+  			int count = sizeof(a);
+  			for(i=0; i<count; i++)
+    			{
+      				printf("%c", a[i]);
+    			}
+  			return 0;
+		}	
+		
+		
+		
+		char a[4] = {'E', 'C', 'E', 'N'};
+		char a[] = "ECEN";
+		printf("%s", a);
+		printf("%s", &a[0]);
+		printf("%c%c%c%c", a[0],a[1],a[2],a[3]);
+		
+		
+		
+		
+		
+	
