@@ -1,0 +1,65 @@
+	> Structures and Unions
+		
+		Variables
+		char x;       1 byte of memory
+		int y;        4 bytes of memory
+		
+		Arrays
+		char x[10];   10 bytes of memory with each of 1 byte
+		int y[10];    10 bytes of memoery with each of 4 bytes
+		
+		Suppose, if we want to allocate as below , then the system allocates but at random locations, we dont want that
+			char x;
+			short y;
+			long z;
+		We want to allocate all consecutively at one block of memory,
+		Structure is a user defined data type.
+		It is a group of various data types.
+		
+		struct xyz abc;
+		struct xyz abc
+		{
+			char x;
+			short y;
+			long z;
+		}
+		
+		abc.x = 10;
+		abc.y = 20;
+		abc.z = 40;
+		
+		struct xyz *abc;//Structure Pointer
+		abc = 4000;
+		(*abc).x = 10;
+		(*abc).y = 20;
+		(*abc).z = 40;
+		
+		OR
+		 abc->x = 10;
+		 abc->y = 20;
+		 abc->z = 40;
+		
+		Now, Lets take an example for better understanding:
+		
+			int main()
+			{
+				struct xyz
+				{
+					char x;
+					short y;
+					long z;
+				};
+				struct xyz abc;
+				abc.x = 10;
+				abc.y = 20;
+				abc.z = 40;
+				printf("%d%d%d\n", abc.x,abc.y,abc.z);
+				printf("%d %d %d\n", &(abc.x), &(abc.y), &(abc.z));
+			}
+		There is a problem called Stuffing.
+		
+		
+		
+			
+		
+		
