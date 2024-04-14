@@ -1,0 +1,17 @@
+
+1) In C/C++, the end of the line using endl or "\n" needs to specified explicitly to end the line and start a new line,
+   but in Python, it automatically takes the end of the line and we need not specify explicitly.
+   
+2) scanf("%[^\n]%*c", s);// this is to read a sentence with words and spaces.
+
+3) Different declarations:
+	char s[100];
+	char *p = malloc(100 *sizeof(char));
+	char *t[] = "Hello";
+	char *names[] = {"Sri", "Venky", "Ravi", "Tom", "Jerry"};
+        char *sports[] = {"Cricket", "Volleyball", "Football", "Hockey", "Chess"};
+        
+	int m;
+	int m[3] = {12, 23, 45};
+	int ages[] = {23, 35, 46, 89, 4};
+        
