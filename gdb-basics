@@ -1,0 +1,12 @@
+How to use GNU gdb debugger from terminal?
+
+	> gdb ./my_program
+	Inside the gdb console, run the following:
+	> break main
+	> run
+	> next or n
+	> step or s
+	> continue
+	> print variable-name
+	> backtrace
+	

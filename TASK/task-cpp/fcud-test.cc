@@ -4,19 +4,20 @@
 #include <regex>
 #include <amqpcpp.h>
 #include <amqpcpp/linux_tcp.h>
+using namespace std;
 
 class MyTcpHandler : public AMQP::TcpHandler {
 public:
     virtual void onAttached(AMQP::TcpConnection *connection) override {
-        std::cout << "TCP connection attached" << std::endl;
+        cout << "TCP connection attached" << endl;
     }
 
     virtual void onError(AMQP::TcpConnection *connection, const char *message) override {
-        std::cerr << "Error occurred: " << message << std::endl;
+        cerr << "Error occurred: " << message << endl;
     }
 
     virtual void onReady(AMQP::TcpConnection *connection) override {
-        std::cout << "TCP connection is ready" << std::endl;
+        cout << "TCP connection is ready" << endl;
     }
 
     virtual void monitor(AMQP::TcpConnection *connection, int fd, int flags) override {
@@ -36,16 +37,16 @@ int main() {
         channel.declareQueue("fcud.input");
 
         // Publish a message to the queue
-        std::string message = "<Message>\n"
+        string message = "<Message>\n"
                               "   <Command>Create</Command>\n"
                               "   <FileName>Xyz.txt</FileName>\n"
                               "   <Content>Lorem Ipsum</Content>\n"
                               "</Message>";
         channel.publish("", "fcud.input", message);
 
-        std::cout << "Message published to fcud.input queue" << std::endl;
-    } catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        cout << "Message published to fcud.input queue" << endl;
+    } catch (const exception &e) {
+        cerr << "Error: " << e.what() << endl;
         return 1;
     }
 

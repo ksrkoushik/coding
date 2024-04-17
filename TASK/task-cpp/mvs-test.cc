@@ -12,15 +12,15 @@ const string FCUD_PATH = "/usr/applications/fcud/files/";
 class MyTcpHandler : public AMQP::TcpHandler {
 public:
     virtual void onAttached(AMQP::TcpConnection *connection) override {
-        std::cout << "TCP connection attached" << std::endl;
+        cout << "TCP connection attached" << endl;
     }
 
     virtual void onError(AMQP::TcpConnection *connection, const char *message) override {
-        std::cerr << "Error occurred: " << message << std::endl;
+        cerr << "Error occurred: " << message << endl;
     }
 
     virtual void onReady(AMQP::TcpConnection *connection) override {
-        std::cout << "TCP connection is ready" << std::endl;
+        cout << "TCP connection is ready" << endl;
     }
 
     virtual void monitor(AMQP::TcpConnection *connection, int fd, int flags) override {
@@ -82,7 +82,7 @@ void handleMessage(const AMQP::Message &message, uint64_t deliveryTag, AMQP::Tcp
 
         // Acknowledge message delivery
         channel.ack(deliveryTag);
-    } catch (const std::exception &e) {
+    } catch (const exception &e) {
         cerr << "Error processing message: " << e.what() << endl;
     }
 }
@@ -104,7 +104,7 @@ int main() {
         // Run the event loop
         cout << "Waiting for messages..." << endl;
         channel.consume("fcud.input");
-    } catch (const std::exception &e) {
+    } catch (const exception &e) {
         cerr << "Error: " << e.what() << endl;
         return 1;
     }

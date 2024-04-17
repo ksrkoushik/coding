@@ -1,0 +1,23 @@
+
+	Different character and string handling methods:
+	> char ch = 'A';// Initialize char with a single character literal.
+		
+	> char str[] = "Hello";// declare a null-terminated char array(C-Style string)
+		
+	> const char *message = "Welcome";// declare a pointer to a string literal
+		This declares a pointer 'message' pointing to a string literal "Welcome"
+		and note that string literals are of type 'const char *'.
+		
+	> string name = "ALice";// declare a string object using string library.
+	
+	> char *dynamicStr = new char[10];// Allocate a dynamic array of chars.
+		This dynamically allocates an array of characters on the heap.
+		But don't forget to free the memory using 'delete[] dynamicStr;'
+		to avoid memory leaks.
+		
+	> char vowels[] = {'a', 'e', 'i', 'o', 'u'};// Array of characters
+	
+	> char *pChar = &ch; //Pointer to char
+	
+ Note: Be cautious with manual memory management('new[]' and 'delete[]') when
+       dealing with dynamic memory allocation of 'char' arrays.
