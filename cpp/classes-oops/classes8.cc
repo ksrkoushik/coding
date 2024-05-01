@@ -1,4 +1,4 @@
-//default constructor
+//understanding default constructor
 #include <iostream>
 #include <string>
 using namespace std;
