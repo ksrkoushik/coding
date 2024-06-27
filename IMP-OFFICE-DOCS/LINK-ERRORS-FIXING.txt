@@ -1,0 +1,49 @@
+25/06/2024(TUE): TO DO
+		>> Delete the duplicate files from gndlib and then build and check if ATC is launching or not?
+		
+		DONE
+		>> Excluded abstractdynamicbase.h, abstractdynamicbase.cpp, abstractproducer.cpp, abstractproducer.h files from gndlib
+
+	STEPS:
+		First check the file and compare with all other same files in the project for any differences. If there are no differences then 
+                follow the following steps else first fix the diffs and then follow the steps
+		1) check for the duplicate files and if they exist in any other project apart from gndlib, just exclude those files from gndlib project.
+		2) Then Add Project Reference: ex: Add Support project as a reference to ATC Ground Station
+			ex: Add additional library directories and additional dependencies to the project(ATCGroundStation).
+				Linker/General, Linker/Input
+				
+		3) Build the individual project to whom you want to refer, ex: SupportLib
+		   and go the location where the .lib file is generated and copy that path.
+		4) Then paste the copied path of .lib file and add in Linker/Input-->Additional Dependencies
+		5) Finally Clean the Solution and Rebuild the entire solution.....
+
+		REPEAT THE STEPS 1 to 5 for all the LINKER Errors.
+
+
+26/06/2024(WED): TO DO
+		>> Delete the duplicate files from gndlib and then build and check if ATC is launching or not?
+
+	1)Excluded abstractdynamicbase.h, abstractdynamicbase.cpp, abstractproducer.cpp, abstractproducer.h files from gndlib and linked with 
+	  C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	2) Ads-c.c excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	3) Ads-c.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	4) Algobase.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	5) archiveheader.h, archiveheader.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	6) asn1code.h, asn1hdr.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib	 
+		Note: asn1hdr.h is present in both Asn1Lib and also in dmlib
+	7) AsnAtnAdsC.cpp. AsnAtnAdsC.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	8) AsnCpdlcB2.h, AsnCpdlcB2.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	9) AspConfig.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	10) AspShareGrnd.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	11) assert.h, assert.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	12) atcmsgutils.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	13) atntest.h, atntest.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	14) BmrFisMsgObj.h, BmrFisMsgObj.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	15) BmrFisRepository.h, BmrFisRepository.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	16) BmrRepository.h, BmrRepositoryView.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	17) cm.c exclude from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+
+
+
+
+

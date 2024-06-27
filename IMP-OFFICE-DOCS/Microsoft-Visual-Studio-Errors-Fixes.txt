@@ -1,0 +1,43 @@
+Errors/Issues:
+
+1) Failed to return new code element, Possible syntax error:
+	Solution: Close VS Solution, Delete .vs folder and Reopen .sln file again
+
+2) C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\Bin (This path is PC Specific)
+	This Bin folder has all the files like .dll, .bat, .xml, .cfg , .exe which are required for the launch of the ATC Ground station in release mode.
+
+3) C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD (This path is PC Specific)
+	This BinD folder has all the files like .dll, .bat, .xml, .cfg , .exe which are required for the launch of the ATC Ground station in Debug mode.
+
+And Note that for points 2 & 3, we may need some more files which have to be copied from the below path:
+	C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\ConfigurationFiles (This path is PC Specific)
+
+Depending on the errors, the respective files have to be copied into either of the folders Bin or BinD.
+
+4) for PTRDIFF error: Copy the below path by right clicking on the project folder-> properties and add this path
+	> C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include
+
+5) If any error related into post build events, then you can click on Properties of the project and go to Post-Build Events and remove all the following elements
+   Post-Build Events: (These are actually trying to copy the post build files to vista_apps folder)
+		copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\dlls
+		copy /Y $(OutDir)ATCGroundStation.exe C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+		copy /Y $(OutDir)AtcGrndAspComDLL.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+		copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+
+6) For LINKER ERRORS, Read the Error and check for the Unresolved issues and go to that object and see if it is properly linked to the project, else follow the below steps
+   to link it properly by adding reference as shown in below steps:
+
+		1) Inside Solution Explorer of Microsoft Visual Studio, Right click on Project and Click on Add -> Reference and then select the Project (Based on the LINK Error)
+                   to be linked as a Reference to our project: ex: Add Support project as a reference to ATC Ground Station
+		
+		2) Then Right click on Properties of the Project and Go to Linker->Input and Add the paths in additional library directories 
+		   and additional dependencies to the project(ATCGroundStation).
+				Linker/General, Linker/Input	
+	
+		3) Build the individual project to which you want to refer, ex: SupportLib
+		   and go the location where the .lib file is generated and copy that path.
+
+		4) Then paste the copied path of .lib file and add in Linker/Input-->Additional Dependencies of the project
+		5) Finally Clean the Solution and Rebuild the entire solution.....
+
+		REPEAT THE STEPS 1 to 5 for all the LINKER Errors

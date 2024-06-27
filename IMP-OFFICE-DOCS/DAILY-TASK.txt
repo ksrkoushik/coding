@@ -1,0 +1,416 @@
+\\Rcinhydfs\AIS\e40052131\Codefiles
+\\Rcinhydfs\AIS\e40052131\LimeSDR
+
+>The following path is to be added to Visual Studio 
+	PATH: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include
+
+04/05/2024(SAT):
+> Preliminary Understanding:
+	>> found that on DLCA side ADS-C does not have the specific class like cpdlc(BmrMsgCpdlcSpecific). 
+           Instead they used BmrMsgData as base class for ADS-C BmrAdscMsgObj. 
+
+	>> Need to work on BmrAdscMsgObj.cpp and BmrAdscMsgObj.h
+	>> Try to understand the following types and why they are used?
+		>> Why there is BmrMsgCpdlcSpecific.cpp and BmrMsgCpdlcSpecific.h for CPDLC but not for FANS and CM?
+		>> Try to know about the siginificance of different .h and .cpp files?
+
+05/05/2024(SUN):
+	> Section 3.5.3: Message Agents ( Pages 20 to 26)
+	> Sections: 4.10.1 ( Figure 37, Page 126), 4.10.2.3 -> Message Library Classes (Figures 39,40,41,42,43)
+
+06/05/2024(MON):
+	>> found that on DLCA side ADS-C does not have the specific class like cpdlc(BmrMsgCpdlcSpecific). 
+           Instead they used BmrMsgData as base class for ADS-C BmrAdscMsgObj. 
+
+	>> Need to work on BmrAdscMsgObj.cpp and BmrAdscMsgObj.h
+	>> Try to understand the following types and why they are used?
+		>> Why there is BmrMsgCpdlcSpecific.cpp and BmrMsgCpdlcSpecific.h for CPDLC but not for FANS and CM?
+		>> Try to know about the siginificance of different .h and .cpp files?
+
+09/05/2024(THU):
+	> There are two cases: CPDLC Messages and CPDLC Mesages with ASN.1 Codec(PDU's).
+	> BmsCpdlcMsgServer.h/.cpp: Build MsgHeader, Verify Msg, Build Verify CpdlcMsg, Update Msg --> Downlink (Outgoing)
+				    ProcessCodecCpdlcMsg-->Uplink (Incoming).
+	This file BmsCpdlcMsgServer.h/.cpp (DLCA side) has the above functionalities but the counter part in Tools side
+	we have a single file BmsCpdlcMsgServerAtc.h/.cpp which includes both CPDLC Messages + PDU's.
+
+	> Tools side, the PDu's are clubbed along with CPDLC msgs only in BmsCpdlcMsgServerAtc.h/.cpp but not in BmsCmMsgServer.h/.cpp.
+	
+	> For simplicity, the main difference between CPDLC Msgs and PDUs can be observed by comparing BmsCpdlcMsgServer.h and BmsCpdlcPduServer.h.
+		>> BmsCpdlcMsgServer.h: Msg (header + msg content) --> Asn1Atn::ATCDownlink Message.
+		Whereas
+		>> BmsCpdlcPduServer.h: AircraftPdus --> Asn1Atn::AircraftPDUs
+
+BmsAdscMsgServerAtc.h/.cpp
+C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\ATC-GrndSim\AtcGrndSource
+
+
+13/05/2024(MON): Comparing BmsFisMsgServer.cpp and BmsAdsCMsgServer.cpp
+	> int BmsAdsCMsgServerAtc::BuildVerifyAdsCReqMsg(NsAdsC::ADSRequestContract request, int& msgKey)   [ADS REQUEST CONTRACT]
+		>> Do we need lines 318 to 322 in BmsAdsCMsgServer.cpp?
+
+	> int BmsAdsCMsgServerAtc::BuildAndVerifyAtnAdsCCancelContractsPDU(int contractType, int& msgKey)   [ADS CANCEL CONTRACT]
+		>> This seems to be fine
+
+15/05/2024(WED):
+	> Changes made to BmrAdsCMsgObj.h:
+		>> Variables Added: 
+				bool m_PosAck;
+				unsigned short m_ContractNumber;
+  				
+		>> Functions Added: 
+				void setReportAcceptAck(bool value);
+				bool getReportAcceptAck() const;
+				void setContractNumber(NsAdsC::ContractType value);
+				void setAdsCProviderAbortReason(NsAdsC::ProviderAbortReason value);
+				int getAdsCProviderAbortReason() const;
+				void setAdsCUserAbortReason(NsAdsC::UserAbortReason value);
+				int getAdsCUserAbortReason() const;
+			
+	> Changes made to BmrAdsCMsgObj.cpp:		
+		>> Functions Added: 
+				void BmsAdsCMsgServerAtc::setReportAcceptAck(bool value){}
+				bool BmsAdsCMsgServerAtc::getReportAcceptAck() const{}
+				void BmsAdsCMsgServerAtc::setContractNumber(NsAdsC::ContractType value){}
+				void BmsAdsCMsgServerAtc::setAdsCProviderAbortReason(NsAdsC::ProviderAbortReason value){}
+				int BmsAdsCMsgServerAtc::getAdsCProviderAbortReason() const{}
+				void BmsAdsCMsgServerAtc::setAdsCUserAbortReason(NsAdsC::ProviderAbortReason value){}
+				int BmsAdsCMsgServerAtc::getAdsCUserAbortReason() const{}
+			
+	> Final changes:
+		BmrAdsCMsgObj.h/.cpp
+		BmsAdsCMsgServerAtc.h/.cpp
+
+16/05/2024(THU): Changes made to the code files
+	> Changes made to BmsAdsCMsgServerAtc.h/.cpp:
+		>> Added the following functions: ProcessAdsCReportMsg(), getAbstracSyntax(), BuildVerifyAdsCContentICMsgOk()
+
+	> Changes made to BmrAdsCMsgObj.h/.cpp:
+		>> Added enum AdsCMsgAbortType,  BmrAdsCMsgObj* FindMsg(), getPerCodedAdsCMsg()
+	
+	> Changes made to traceatcasp.h:
+		>> #define AdsCMsgServer
+
+17/05/2024(FRI): Changes made to the code files
+	> changes made to BmsAdsCMsgServerAtc.h/.cpp:
+		>> Added the following function: BuildAndVerifyAtnAdsCDemandContractsPDU
+
+20/05/2024(MON): Changes made to the code files
+	> changes made to BmsAdsCMsgServerAtc.h/.cpp:
+		>> Added the following functions:  BuildVerifyAdsCReport, BuildVerifyAdsCNonCompliance, 
+						   BuildVerifyAdsCPosAcknowledgement, BuildVerifyAdsCReject
+
+21/05/2024(TUE): Changes made to the code files
+	> changes made to BmsAdsCMsgServerAtc.h/.cpp:
+		>> Added Encoding and Decoding functionality to the following functions:
+			BuildAndVerifyAtnAdsCCancelContractsPDU, BuildAndVerifyAdsCUserAbortPDU, BuildAndVerifyAdsCProviderAbortPDU
+		>> And Added "CancelContract_demand_contract = 2" to enum CancelContract in Ads-c.h file.
+
+		>> Added the function:GetAdsCAircraftPduChoice to BmrAdsCMsgObj.h/.cpp
+
+
+23/05/2024(THU): Changes made to the code files
+	>> Added a Debug statement for Decode pdu success to BmsAdsCMsgServerAtc.cpp.
+	>> Added new function BuildVerifyAdsCDemandReqMsg to BmsAdsCMsgServerAtc.cpp.
+
+24/05/2024(FRI): Changes made to the code files
+	>> Added new functions: BuildVerifyAdsCEventReqMsg, BuildVerifyAdsCPeriodicReqMsg to BmsAdsCMsgServerAtc.cpp/.h files.
+
+	>> Modified the functions: BuildVerifyAdsCDemandContractReq, BuildVerifyAdsCEventContractReq, BuildVerifyAdsCPeriodicContractReq
+				to BmsAdsCMsgServerAtc.cpp/.h files.
+	>> Added lines to delete the allocated memory.
+	>>DEBUG:
+		> I could able to track the values of variables used in the functions.
+
+On Monday-first, NEED TO COMMIT THESE CHANGES:
+	>> AtcGrndAspComDLL.cpp/.h, BmsAdsCMsgServerAtc.cpp/.h, AdsCDemandContractDialog.cpp
+
+27/05/2024(MON): CHANGES MADE
+	>> Added New functions: ProcessAdsCDemandContractReport, ProcessAdsCEventContractReport, ProcessAdsCPeriodicContractReport
+	>> Changes made:
+		>> Changed arg "contract_req" to "msg" in functions: BuildVerifyAdsCDemandContractReq, BuildVerifyAdsCEventContractReq,
+			BuildVerifyAdsCPeriodicContractReq in BmsAdsCMsgServerAtc.h/.cpp files
+		>> Change arg "contract_req" to "msg" in function dllBuildVerifyAdsCDemandContractReq in AtcGrndAspComDLL.h/.cpp
+
+
+28/05/2024(TUE): Changes made
+	>> Added new functions: ProcessAdsCDemandContractPosAck
+				ProcessAdsCDemandContractAccepted
+				ProcessAdsCDemandContractRejected
+				ProcessAdsCDemandContractNcn
+
+	>> Modified functions: BuildContentProtectedMsgOk, BuildVerifyContentProtectedMsg
+
+
+29/05/2024(WED): Changes made
+	>> Modified functions: BuildVerifyContentProtectedMsg, BuildContentProtectedMsgOk in BmsAdsCMsgServerAtc.cpp file and also added SingletonPointer<AsnCpdlc> m_pAsnCpdlc
+	in BmsAdsCMsgServerAtc.h file
+
+	>> Changed void ptrs for arguments of functions: dllBuildVerifyAdsCEventContractReq, dllBuildVerifyAdsCPeriodicContractReq
+           in AtcGrndAspComDLL.h/.cpp.
+
+	>> Added new functions: ProcessAdsCEventContractPosAck, ProcessAdsCEventContractAccepted
+				ProcessAdsCEventContractRejected, ProcessAdsCEventContractNcn
+
+				ProcessAdsCPeriodicContractPosAck, ProcessAdsCPeriodicContractAccepted
+				ProcessAdsCPeriodicContractRejected, ProcessAdsCPeriodicContractNcn
+				
+
+31/05/2024(FRI): CHANGES made
+	>> Added new function: ProcessAdsCPeriodicContractCancel, ProcessAdsCEventContractCancel in BmsAdsCMsgServerAtc.h/.cpp
+
+
+
+03/06/2024(MON): DIFF Observations:
+	> AtnAdsCDemandContractDialog.cpp/.h:
+		>>  dllMsgServerBuildGrndApdu_AdsC(msgKey, ADSC_aDS_contract_PDU_chosen);//passed the contract pdu as choice
+	> BmsAdsCMsgServerAtc.cpp/.h:
+		>> some include headers removed
+		>> BuildVerifyApdu(NsAdsC::ADSC_ADSGroundPDUs* msg, int& msgKey);//passed GroundPDUs
+		>> BuildSendApduOk, Added steps to pack the content protected msg into ADSGroundPDUs 
+		   and then passed ADSGroundPDUs to BuildVerifyApdu.
+
+	> TASK to be done today:
+		>> Changes to be made in BmrAdsCMsgObj.h/.cpp 
+			>> Create functions for Set-Contracttype and Get-Contracttype in BmrAdsCMsgObj.h/.cpp files( Both in projects AtcGrndBmsLib and gndlib)
+		>> Changes to be made in BmsAdsCMsgServerAtc.h/.cpp file
+			>> Use the above creates Set-Contracttype and Get-Contracttype functions inside BuildSendApduOk.
+			>> Use Get-Contracttype functionality in BuildVerifyAdsCDemandContractReq function.
+			>> And Use Set-Contracttype in BuildSendApduOk function
+
+	Added new functions: Set_ContractType, Get_ContractType() in BmrAdsCMsgObj.cpp/.h files 
+	Modified BuildVerifyAdsCDemandContractReq function by using the Set_ContractType in BmsAdsCMsgServerAtc.cpp/.h file
+	Modified BuildSendApduOk function for assigning contract type using Get_ContractType in BmsAdsCMsgServerAtc.cpp/.h file
+
+	Modified ProcessPeriodicContract function in AtnAdsCPeriodicContractDialog.cpp file
+	Modified BuildVerifyAdsCPeriodicContractReq in BmsAdsCMsgServerAtc.cpp file
+
+	Modified ProcessEventContract function in AdsCEventContractDialog.cpp file
+	Modified BuildVerifyAdsCEventContractReq in BmsAdsCMsgServerAtc.cpp file
+
+	-----------------------------------------DONE--------------------------------------------------------------------------------
+	
+	Presently working on BuildAndVerifyAtnAdsCCancelContractsPDU in BmsAdsCMsgServerAtc.cpp file 
+
+
+04/06/2024(TUE):
+	> Modified BuildAndVerifyAtnAdsCCancelContractsPDU in BmsAdsCMsgServerAtc.cpp file 
+	
+	> TO DO:
+		>> create one more function in BmrAdsCMsgObj similar to this GetAdsCAircraftPduChoice for GrundPdu (both for set and get).
+		>> Then use the set function in BuildAndVerifyAtnAdsCCancelContracts to set the selected option 
+		   i.e ADSC_aDS_cancel_all_contracts_PDU_chosen or ADSC_aDS_cancel_contract_PDU_chosen
+		>> get function we will use in AtnAdsCContractManager::cancelContract
+		This will enable us to use both the pdu choice and then the contract type to decide how to cancel the contracts.
+
+05/06/2024(WED):
+		>>Modified BuildAndVerifyAtnAdsCCancelContractsPDU in BmsAdsCMsgServerAtc.cpp file 
+		>>Added new functions: SetAdsCGroundPduChoice, GetAdsCGroundPduChoice in BmrAdsCMsgObj.h/.cpp file
+		>> Modified AtnAdsCContractManager::cancelContract function in AtnAdsCContractMgr.cpp file
+
+
+06/06/2024(THU):
+		>> Modified BmsAdsCMsgServerAtc::ProcessCodedApdu in BmsAdsCMsgServerAtc.cpp file
+		>> Deleted this function BmsAdsCMsgServerAtc::BuildVerifyAdsCReport
+			int BuildVerifyAdsCReport(NsAdsC::ADSC_ADSReport& report, int& msgKey);
+		>> Added functions : Set_AdsCCancelRejectReason, Get_AdsCCancelRejectReason, SetAdsCMsgChoice to BmrAdsCMsgObj.h/.cpp files
+
+
+07/06/2024(FRI): TO DO
+		>> Need to add the code related to integrity check etc in BmsAdsCMsgServerAtc::ProcessCodedApdu similar to DLCA
+		>> Need to update this function BmsAdsCMsgServerAtc::ProcessDownlinkCodedMsg similar to BmsAdscMsgServer::ProcessCodedAdscMsg(DLCA)
+		>> Need to decode report/non compliance etc in the above function
+		>> In this function we will try decode other PDUs but we will start with ADSC_ADSReport_PDU
+		
+		DONE
+		>> Modified ProcessCodedApdu, ProcessDownlinkCodedMsg in BmaAdsCMsgServerAtc.h/.cpp file.
+		
+
+10/06/2024(MON): TO DO
+		>> Need to modify AtnAdsCContractMgr.cpp/.h file for Periodic Contract
+		>> Tried to Understand Integrity-Check Algorithm.
+		
+		DONE
+		>> Modified AtnAdsCContractManager::createContract(int msgKey, String& fd, NsAdsC::ADSC_ContractType ContractType) function in AtnAdsCContractMgr.cpp/.h
+
+11/06/2024(TUE): TO DO
+		>> 1) Need to modify in all functions of AtnAdsCContractMgr.cpp/.h file for Periodic Contract.
+
+		>> 2) Create ProcessEndReq, ProcessEndCnf related functions for Event and Periodic Contracts ( work with AtnAdsCContractManager.cpp/.h and AtnAdsCPeriodicContract.cpp/.h, AtnAdsCEventContract.cpp/.h files)
+		>>    Refer Figure 5.2, FisUpdateContract.cpp/.h file
+
+		DONE
+		>> Modified getPeriodicContractNumber, AssignContractNumber, cancelContract, canCreateNewPeriodicContractRequest in AtnAdsCContractMgr.cpp
+		>> Modified processCancelContract in AtnAdsCPeriodicContract.h/.cpp and AtnAdsCEventContract.h/.cpp files
+		>> Refer Virtualstack, DSInterface.cpp files
+
+12/06/2024(WED): TO DO
+		>> 1) Need to Modify processCancelContract in AtnAdsCPeriodicContract.h/.cpp and AtnAdsCEventContract.h/.cpp files
+	
+		DONE
+		>> Modified processCancelContract in AtnAdsCPeriodicContract.h/.cpp and AtnAdsCEventContract.h/.cpp files
+		   Modified cancelContract function in AtnAdsCContractManager.cpp file
+
+		>> Modified BuildAndVerifyAtnAdsCCancelContracts in BmsAdsCMsgServerAtc.cpp file
+		>> Modified cancelContract in AtnAdsCContractManager.cpp file
+
+
+13/06/2024(THU): TO DO
+		>> Modified type of setContractNumber in BmsAdsCMsgObj.h/.cpp file (in both gndlib also)
+		>> Modified EstablishDemandContract in AtnAdsCDemandContract.cpp, AtnAdsCEventContract.cpp, AtnAdsCPeriodicContract.cpp files
+		>> Modified dllBuildVerifyAdsCDemandqContractReq, dllBuildVerifyAdsCEventContractReq, dllBuildVerifyAdsCPeriodicContractReq
+		   in ATnGrndAspComDLL.cpp file
+		>> Modified createContract in AtnAdsCContractManager.cpp file
+
+
+14/06/2024(FRI): TO DO
+		>> Update the following functions: Use the code from ProcessCodedApdu function:
+			ProcessAdsCDemandContractReport, ProcessAdsCDemandContractAccepted, ProcessAdsCDemandContractPosAck, 
+			ProcessAdsCDemandContractRejected, ProcessAdsCDemandContractNcn
+			Similarly for EC and PC as well.
+		
+		DONE
+		>> ProcessAdsCContract type in ProcessCodedApdu function in BmsAdsCMsgServerAtc.cpp file	
+		>> Added new function ProcessContractResponse in AtnAdsCContractMgr.cpp/.h file
+		>> Modified ProcessStartConfirmation function in AdsCGndAseDialogue.cpp file
+
+
+
+18/06/2024(TUE): TO DO
+		>> Modify ProcessAdsCEndCnf function in AtnAdsCContractMgr.cpp/.h file
+
+		DONE
+		>> Modified ProcessAdsCEndCnf function in AtnAdsCContractMgr.cpp/.h file
+
+
+
+18/06/2024(WED): TO DO
+		>> Modify AssignContractNumber, createContract functions in AtnAdsCContractMgr.cpp/.h file
+		>> Modify EstablishEventContract, EstablishPeriodicContract in respective event, periodic contract manager modules
+		>> Modify dllBuildVerifyAdsCDemandContractReq, dllBuildVerifyAdsCEventContractReq, dllBuildVerifyAdsCPeriodicContractReq in AtcGrndAspComDLL.cpp file
+
+		DONE
+		>> Modified AssignContractNumber, createContract functions in AtnAdsCContractMgr.cpp/.h file
+		>> Modifed EstablishEventContract, EstablishPeriodicContract in respective event, periodic contract manager modules
+		>> Modifed dllBuildVerifyAdsCDemandContractReq, dllBuildVerifyAdsCEventContractReq, dllBuildVerifyAdsCPeriodicContractReq in AtcGrndAspComDLL.cpp file
+
+20/06/2024(THU): TO DO
+		>> Modified AssignContractNumber, createContract functions in AtnAdsCContractMgr.cpp/.h file
+		>> Modified EstablishEventContract, EstablishPeriodicContract in respective event, periodic contract manager modules
+
+		>> Modified createContract function in AtnAdsCContractMgr.cpp file
+		
+21/06/2024(FRI): TO DO
+		>> Modify ProcessAdsCPeriodicContractCancel, ProcessAdsCEventContractCancelin BmsAdsCMsgServerAtc.cpp
+		
+		DONE
+		>> >> Modified ProcessAdsCPeriodicContractCancel, ProcessAdsCEventContractCancelin BmsAdsCMsgServerAtc.cpp
+
+
+24/06/2024(MON): TO DO
+		>> Reverted the changes done to ProcessAdsCPeriodicContractCancel, ProcessAdsCEventContractCancel functions in BmsAdsCMsgServerAtc.cpp
+
+
+25/06/2024(TUE): TO DO
+		>> Delete the duplicate files from gndlib and then build and check if ATC is launching or not?
+		
+		DONE
+		>> Excluded abstractdynamicbase.h, abstractdynamicbase.cpp, abstractproducer.cpp, abstractproducer.h files from gndlib
+
+	STEPS:
+		First check the file and compare with all other same files in the project for any differences. If there are no differences then 
+                follow the following steps else first fix the diffs and then follow the steps
+		1) check for the duplicate files and if they exist in any other project apart from gndlib, just exclude those files from gndlib project.
+		2) Then Add Project Reference: ex: Add Support project as a reference to ATC Ground Station
+			ex: Add additional library directories and additional dependencies to the project(ATCGroundStation).
+				Linker/General, Linker/Input
+				
+		3) Build the individual project to whom you want to refer, ex: SupportLib
+		   and go the location where the .lib file is generated and copy that path.
+		4) Then paste the copied path of .lib file and add in Linker/Input-->Additional Dependencies
+		5) Finally Clean the Solution and Rebuild the entire solution.....
+
+		REPEAT THE STEPS 1 to 5 for all the LINKER Errors.
+
+
+26/06/2024(WED): TO DO
+		>> Delete the duplicate files from gndlib and then build and check if ATC is launching or not?
+
+	1)Excluded abstractdynamicbase.h, abstractdynamicbase.cpp, abstractproducer.cpp, abstractproducer.h files from gndlib and linked with 
+	  C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	2) Ads-c.c excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	3) Ads-c.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	4) Algobase.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	5) archiveheader.h, archiveheader.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	6) asn1code.h, asn1hdr.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib	 
+		Note: asn1hdr.h is present in both Asn1Lib and also in dmlib
+	7) AsnAtnAdsC.cpp. AsnAtnAdsC.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	8) AsnCpdlcB2.h, AsnCpdlcB2.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+	9) AspConfig.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	10) AspShareGrnd.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	11) assert.h, assert.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\SupportLib.lib
+	12) atcmsgutils.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	13) atntest.h, atntest.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndAspComDLL.lib
+	14) BmrFisMsgObj.h, BmrFisMsgObj.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	15) BmrFisRepository.h, BmrFisRepository.cpp excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	16) BmrRepository.h, BmrRepositoryView.h excluded from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\AtcGrndBmsLib.lib
+	17) cm.c exclude from gndlib and linked with C:\Users\e40052131\Common_Tools\ATC_Ground_Station_64bit\Harmonized_DLT\BinD\lib\Asn1Lib.lib
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\dlls
+copy /Y $(OutDir)ATCGroundStation.exe C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+copy /Y $(OutDir)AtcGrndAspComDLL.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+
+
+
+Post-Build Events:
+copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\dlls
+copy /Y $(OutDir)ATCGroundStation.exe C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+copy /Y $(OutDir)AtcGrndAspComDLL.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+copy /Y $(OutDir)Sockets.dll C:\rw_apps\dlnk-dlca\branches\DLCA6510_Simulation\vista_apps\ATCGroundStationTool_64\ATCGS_UsingAGPS\exe
+
+
+
+
+
+
+
+
+
