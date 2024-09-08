@@ -1,12 +1,16 @@
-Date (23072023):
+
+CHAPTER-I: NETWORK MODELS
 
 1) MAC or PHY Address:
 	Medium Access Control or Physical Address.
 	It is a 48 bit, 12 digit number.
-	first 6 digits: vendor or company ID
-	Last 6 digits: Internet address
-	getmac (on windows)
-	ifconfig(linux)
+	first 6 digits: vendor or company ID or OUI (Organizational Unique Identifier or EUI-Extended Unique Identifier)
+	Last 6 digits: device id or manufacturer's unique serial number
+	
+	Commands used:
+	
+	getmac, ipconfig /all (on windows) > Check for the "Physical Address" term.
+	ifconfig, ip a (linux) > Check for the "link/ether" term.
 
 2) IP Address:
 		IPv4			IPv6
